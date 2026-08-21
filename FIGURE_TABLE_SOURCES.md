@@ -24,7 +24,7 @@ separately.
 | Table 2 (NNU population characteristics) | `Table_02_NNU_characteristics.R` |
 | Table 3 (CFR by phenotype x birth-weight category) / Table 4 (admissions by phenotype x birth-weight category) | `Table_03_04_distribution_and_CFR.R` |
 | Figure 3 (CFR by SVN phenotype and site) | `dep_Figure03_CFR_comparison.R` (data) + `Figure_03_CFR_by_SVN_and_site.R` (chart) |
-| Table 5 (timing of neonatal death) | `Table_05_timing_of_death.R` |
+| Table 5 (timing of neonatal death) / Supplementary Table S2 (timing of neonatal death **by site**) | `Table_05_timing_of_death.R` — writes both the by-phenotype breakdown (Table 5) and the by-site breakdown (Supplementary Table S2) in one run; see the note below |
 | Figure 5 (timing of death chart) | `Figure_05_timing_of_death_by_SVN.R` |
 | Table 6 (length of stay) | `Table_06_length_of_stay.R` |
 | Table 7a/7b/7c (causes of death, combined / KCH / SMCH) | `Table_07a_causes_of_death.R`, `Table_07bc_causes_of_death_by_site.R` |
@@ -42,14 +42,26 @@ separately.
 | Appendix Table Sx (univariable, full vs USS vs non-USS) | `Appendix_Table_Sx_univariable_full_vs_USS_vs_nonUSS.R` |
 | Supplementary Table S1 (validation: CFR, full vs USS) | `Supplementary_Table_S1_validation_CFR_full_vs_USS.R` |
 
-## Open item — not yet resolved
+## Resolved: "Supplementary Table S2"
 
-The manuscript's HIV section references a **"Supplementary Table S2"**
-alongside "Appendix Figure 9" — no script in this repository has been
-identified as its source yet. This needs chasing down as part of the
-manuscript-numbering cleanup (see the duplication note above); it may turn
-out to be produced already under a different name, or it may be a genuine
-gap. Flagging here rather than guessing.
+The manuscript's HIV section cites **"Supplementary Table S2"** alongside
+"Appendix Figure 9" — but S2's own caption, in the Supplementary material
+section, is *"Timing of neonatal death by site"*, which has nothing to do
+with HIV. This is a manuscript cross-reference slip, not a gap in this
+pipeline: `Table_05_timing_of_death.R` already produces the by-site timing
+breakdown (`table_05_timing_by_site.csv` / `_cfr.csv`), and its admission
+counts and case-fatality rates match the manuscript's S2 table exactly
+(verified against real data 2026-08-21 — every count and CFR matched; e.g.
+KCH 0-1 day: 342 deaths, CFR 33 per 1,000). The only cosmetic difference is
+the percentage base: the manuscript's S2 shows each cell as a percentage of
+that column's *recorded-age* deaths only, while the script's own
+console/summary percentages include the "Unknown age" column in the
+denominator — the underlying counts are identical either way, this is a
+display convention, not a data problem. Whoever reconciles the manuscript
+text (see the duplication note above) should either fix the S2 citation in
+the HIV paragraph to point at whatever HIV-specific table was actually
+intended, or confirm S2 was meant to be about timing all along and drop the
+stray HIV cross-reference.
 
 ## Regression note
 
