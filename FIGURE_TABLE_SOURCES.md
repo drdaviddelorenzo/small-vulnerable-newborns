@@ -40,7 +40,7 @@ separately.
 | Table 12 (CFR by sex within phenotype) | `Table_12_CFR_by_sex.R` |
 | Figure 9 (SVN distribution by HIV exposure) | `dep_Figure09_hiv_distribution_by_svn.R` (data) + `Figure_09_SVN_distribution_by_HIV.R` (chart) |
 | Appendix Table Sx (univariable, full vs USS vs non-USS) | `Appendix_Table_Sx_univariable_full_vs_USS_vs_nonUSS.R` |
-| Supplementary Table S1 (validation: CFR, full vs USS) | `Supplementary_Table_S1_validation_CFR_full_vs_USS.R` |
+| Supplementary Table S1 (validation: CFR by SVN phenotype and site, full cohort vs ultrasound-dated subset) | `Supplementary_Table_S1_validation_CFR_full_vs_USS.R` — writes `supplementary_tables1_cfr_by_svn_and_site.csv` (added 2026-08-21; the script previously only produced a both-sites-pooled CFR, not the by-site breakdown the manuscript table actually needs) |
 
 ## Resolved: "Supplementary Table S2"
 

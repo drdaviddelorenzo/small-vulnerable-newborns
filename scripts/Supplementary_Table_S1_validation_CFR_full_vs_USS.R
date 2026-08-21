@@ -146,6 +146,40 @@ cfr_comparison <- bind_rows(
 cat("\nCFR by SVN group and population:\n")
 print(cfr_comparison)
 
+# -- By-site breakdown (manuscript Supplementary Table S1: KCH full/USS, SMCH full/USS) --
+compute_cfr_by_site <- function(df, label) {
+  df %>%
+    group_by(facility, svn_category) %>%
+    summarise(
+      population = label,
+      n          = n(),
+      n_deaths   = sum(outcome_bin),
+      cfr_pct    = round(n_deaths / n * 100, 1),
+      .groups    = "drop"
+    ) %>%
+    bind_rows(
+      df %>%
+        group_by(facility) %>%
+        summarise(
+          svn_category = "Overall",
+          population   = label,
+          n            = n(),
+          n_deaths     = sum(outcome_bin),
+          cfr_pct      = round(n_deaths / n * 100, 1),
+          .groups      = "drop"
+        )
+    ) %>%
+    select(population, facility, svn_category, n, n_deaths, cfr_pct)
+}
+
+cfr_by_site <- bind_rows(
+  compute_cfr_by_site(base_all, "full"),
+  compute_cfr_by_site(base_uss, "USS")
+)
+
+cat("\nCFR by SVN group, population and site (Supplementary Table S1 layout):\n")
+print(cfr_by_site)
+
 # ============================================================
 # 3. TEMPERATURE OR PER 1 degC DECREASE
 # ============================================================
@@ -289,6 +323,7 @@ cat("\n=== Saving outputs ===\n")
 
 write.csv(svn_dist,           file.path(OUTPUT_DIR, "supplementary_tables1_svn_distribution.csv"),   row.names = FALSE)
 write.csv(cfr_comparison,     file.path(OUTPUT_DIR, "supplementary_tables1_cfr_by_svn.csv"),         row.names = FALSE)
+write.csv(cfr_by_site,        file.path(OUTPUT_DIR, "supplementary_tables1_cfr_by_svn_and_site.csv"), row.names = FALSE)
 write.csv(temp_or_comparison, file.path(OUTPUT_DIR, "supplementary_tables1_temp_or_comparison.csv"), row.names = FALSE)
 write.csv(steroid_comp,       file.path(OUTPUT_DIR, "supplementary_tables1_steroid_pretermaga.csv"), row.names = FALSE)
 write.csv(summary_table,      file.path(OUTPUT_DIR, "supplementary_tables1_validation_summary.csv"), row.names = FALSE)
@@ -304,6 +339,7 @@ saveWorkbook(wb, file.path(OUTPUT_DIR, "38_uss_validation.xlsx"), overwrite = TR
 cat(sprintf("\nOutputs saved to: %s\n", OUTPUT_DIR))
 cat("supplementary_tables1_svn_distribution.csv\n")
 cat("supplementary_tables1_cfr_by_svn.csv\n")
+cat("supplementary_tables1_cfr_by_svn_and_site.csv\n")
 cat("supplementary_tables1_temp_or_comparison.csv\n")
 cat("supplementary_tables1_steroid_pretermaga.csv\n")
 cat("supplementary_tables1_validation_summary.csv\n")
