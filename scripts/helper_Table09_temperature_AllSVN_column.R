@@ -1,0 +1,53 @@
+# ==============================================================================
+# 56_temp_or_allsvn.R  (SCRIPTS v4)
+# Table 10 "All-SVN" column: univariable admission-temperature odds ratios for
+# neonatal death in the POOLED All-SVN group (Term-SGA + Preterm-AGA +
+# Preterm-SGA; Term-AGA is the reference phenotype and is EXCLUDED).
+#
+# Reproduces the values by pooling the per-phenotype temperature x death counts
+# in dep_table09_temp_cat_sample_sizes.csv and computing the 2x2 odds ratio vs Normal
+# (36.5-37.5C). For a single categorical predictor the sample OR equals the
+# glm(death ~ temp_cat) MLE, so this matches a logistic model exactly.
+# ASCII only (DSH).  Run:  Rscript 56_temp_or_allsvn.R
+# ==============================================================================
+# ---- v4 path adapter (locate shared setup in SCRIPTS V3; write to this folder) ----
+# --- Locate and source the shared setup (self-contained; runs from anywhere) --
+SCRIPT_DIR <- local({
+    a <- commandArgs(FALSE); f <- a[grepl("^--file=", a)]
+    if (length(f)) dirname(normalizePath(sub("^--file=", "", f[1]))) else getwd()
+})
+setwd(SCRIPT_DIR)
+source("00a_setup_shared.R")
+IN  <- file.path(OUTPUT_DIR, "dep_table09_temp_cat_sample_sizes.csv")
+OUT <- file.path(OUTPUT_DIR, "helper_table09_temp_or_allsvn.csv")
+if (!file.exists(IN)) stop("Missing dep_table09_temp_cat_sample_sizes.csv - run dep_Table09_temperature_categorical_OR.R first")
+
+x <- read.csv(IN, stringsAsFactors = FALSE)
+# pooled All-SVN = the three vulnerable phenotypes
+svn <- subset(x, svn_category %in% c("Term-SGA", "Preterm-AGA", "Preterm-SGA"))
+agg <- aggregate(cbind(n, n_deaths) ~ temp_cat, data = svn, FUN = sum)
+
+ref <- agg[agg$temp_cat == "4_Normal", ]
+c_d <- ref$n_deaths; c_a <- ref$n - ref$n_deaths          # normal deaths / alive
+lab <- c("1_SevereHypothermia" = "Severe hypothermia (<32C)",
+         "2_Hypothermia"       = "Moderate hypothermia (32-35.9C)",
+         "3_LowNormal"         = "Mild hypothermia (36.0-36.4C)",
+         "5_Hyperthermia"      = "Hyperthermia (>37.5C)")
+
+res <- do.call(rbind, lapply(names(lab), function(k) {
+    r <- agg[agg$temp_cat == k, ]
+    a_d <- r$n_deaths; a_a <- r$n - r$n_deaths            # category deaths / alive
+    or  <- (a_d / a_a) / (c_d / c_a)
+    se  <- sqrt(1/a_d + 1/a_a + 1/c_d + 1/c_a)            # SE of log(OR)
+    lo  <- exp(log(or) - 1.96 * se); hi <- exp(log(or) + 1.96 * se)
+    p   <- 2 * pnorm(-abs(log(or) / se))
+    data.frame(category = lab[[k]], n = r$n, deaths = a_d,
+               OR = round(or, 2), CI = sprintf("%.2f-%.2f", lo, hi),
+               p = signif(p, 3),
+               cell = sprintf("%.2f%s", or, ifelse(p < 0.05, "*", "")))
+}))
+write.csv(res, OUT, row.names = FALSE)
+cat("\nAll-SVN admission-temperature ORs (pooled Term-SGA + Preterm-AGA + Preterm-SGA)\n")
+cat(sprintf("Reference Normal: n=%d, deaths=%d\n", ref$n, c_d))
+print(res, row.names = FALSE)
+cat("\nSaved", OUT, "\n56_temp_or_allsvn.R complete.\n")
