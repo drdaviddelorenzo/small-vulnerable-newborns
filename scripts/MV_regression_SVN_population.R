@@ -1,35 +1,20 @@
 # ==============================================================================
-# 40_svn_multivariable_regression.R
-# NEW ANALYSIS (July 2026): Independent predictors of death WITHIN the SVN
-# population.
+# Purpose: independent predictors of neonatal death within the SVN
+# population (multivariable logistic regression, with univariable estimates
+# for comparison).
 #
-# Background (co-author decisions, 7 July 2026):
-#   1a  Population is restricted to the SVN phenotypes only (Term-SGA,
-#       Preterm-AGA, Preterm-SGA). Term-AGA (the non-vulnerable group) is
-#       EXCLUDED. Birth-weight category is NOT used as a predictor (it is
-#       collinear with the phenotype, which is defined by weight + gestation).
-#       Gestation band is also dropped for the same reason - prematurity is
-#       carried by the phenotype term.
-#   2b  The birth-weight mortality gradient (ELBW vs NBW) is NOT modelled here.
-#       It stays descriptive (existing Table 5 / Figure 3). See script 10/12.
-#   3a  We fit a MULTIVARIABLE model (all predictors together) and also report
-#       the univariable estimate for each predictor. The covariate list is
-#       printed and saved so the manuscript can state exactly what the model is
-#       adjusted for.
-#   4a  The hyperthermia / Term-AGA finding is kept but sourced from a
-#       WHOLE-COHORT analysis - see companion script 41.
+# Definitions: population restricted to the three SVN phenotypes (Term-SGA,
+# Preterm-AGA, Preterm-SGA); Term-AGA is excluded. Reference phenotype =
+# Term-SGA (the least-severe SVN phenotype). Birth weight, gestation band and
+# pre-eclampsia are excluded as predictors: the first two are collinear with
+# the phenotype (defined by weight + gestation), and pre-eclampsia is not
+# estimable once the non-vulnerable Term-AGA group is removed. The
+# adjustment set (covariate list) is printed and saved alongside the
+# results. See MV_regression_whole_cohort.R for the same model with Term-AGA
+# as the phenotype reference.
 #
-# Vulnerability axis in this model: svn_cat3 (phenotype), reference = Term-SGA
-# (the least-severe SVN phenotype; Term-AGA is not in the population).
-#
-# Outputs (in ../SCRIPTS2-JULY2026/outputs):
-#   40_svn_population_counts.csv       - denominator + events (verify 17,956)
-#   40_svn_univariable.csv             - univariable OR per predictor
-#   40_svn_multivariable.csv           - multivariable model (overall)
-#   40_svn_multivariable.xlsx          - univariable + multivariable + covariates
-#   40_svn_multivariable_missingness.csv
-#
-# NOTE: ASCII characters only (DSH requirement).
+# Output: 40_svn_population_counts.csv, 40_svn_univariable.csv,
+#         40_svn_multivariable.csv (+ .xlsx), 40_svn_multivariable_missingness.csv
 # ==============================================================================
 
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
@@ -42,7 +27,7 @@ source("00a_setup_shared.R")
 
 cat("\n=== MV_regression_SVN_population.R ===\n")
 
-OUT2 <- OUTPUT_DIR   # alias so ported OUT2 references resolve to output/<pop>/tables
+OUT2 <- OUTPUT_DIR
 
 # ==============================================================================
 # LOAD DATA AND RESTRICT TO THE SVN POPULATION
@@ -83,9 +68,9 @@ cat(sprintf("SVN population: %d  (KCH %d, SMCH %d); deaths %d\n",
 cat("  (Expect total 17,956; KCH 6,761; SMCH 11,195 - verify against 40_svn_population_counts.csv)\n")
 
 # ==============================================================================
-# DERIVE RISK-FACTOR VARIABLES (Version A categorisations; identical coding to
-# script 31 so results are comparable to the previous pipeline). Birth-weight
-# and gestation-band predictors are intentionally NOT derived here.
+# DERIVE RISK-FACTOR VARIABLES (same coding as MV_regression_whole_cohort.R,
+# so the two models are directly comparable). Birth-weight and gestation-band
+# predictors are intentionally NOT derived here.
 # ==============================================================================
 data <- data %>%
     mutate(

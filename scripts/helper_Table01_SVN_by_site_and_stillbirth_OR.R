@@ -1,16 +1,16 @@
 # ==============================================================================
-# 55_table1_svn_by_site_and_stillbirth_OR.R  (SCRIPTS v4)
-# Two maternal-population outputs on the CURRENT data (all births, valid BW+GA):
-#   (1) SVN phenotype distribution by site (KCH / SMCH / Combined), n and % of
-#       deliveries  -> Table 1 "SVN phenotype (all births)" block.
-#   (2) Combined (pooled) stillbirth odds ratio + 95% CI + p for each category
-#       vs its reference (Term-AGA for phenotype; NBW for birth weight)
-#       -> Table 2 / 2b probability column.
-# Denominator = all births (live births + stillbirths), matching the 8 Jul
-# decision to include stillbirths. ASCII only (DSH).
-# Run:  Rscript 55_table1_svn_by_site_and_stillbirth_OR.R
+# Purpose: two maternal-population outputs, on all births with valid birth
+# weight and gestational age:
+#   (1) SVN phenotype distribution by site (KCH / SMCH / Combined), n and %
+#       of deliveries -- feeds Table 1's "SVN phenotype (all births)" block.
+#   (2) Pooled stillbirth odds ratio + 95% CI + p for each category vs its
+#       reference (Term-AGA for phenotype; NBW for birth weight).
+#
+# Definitions: denominator = all births (live births + stillbirths).
+#
+# Output: helper_table01_svn_by_site_allbirths.csv,
+#         helper_table01_stillbirth_or_svn.csv, helper_table01_stillbirth_or_bw.csv
 # ==============================================================================
-# ---- v4 path adapter (locate shared setup in SCRIPTS V3; write to this folder) ----
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({
     a <- commandArgs(FALSE); f <- a[grepl("^--file=", a)]
@@ -18,7 +18,7 @@ SCRIPT_DIR <- local({
 })
 setwd(SCRIPT_DIR)
 source("00a_setup_shared.R")
-OUT2 <- OUTPUT_DIR   # 4DSH: alias so ported OUT2 references resolve to outputs/<pop>/tables
+OUT2 <- OUTPUT_DIR
 suppressPackageStartupMessages({library(dplyr); library(tidyr); library(broom)})
 cat("\n=== 55_table1_svn_by_site_and_stillbirth_OR.R ===\n")
 

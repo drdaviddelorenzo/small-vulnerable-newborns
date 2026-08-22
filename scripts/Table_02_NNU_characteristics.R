@@ -1,20 +1,12 @@
 # ==============================================================================
-# 48_table3_nnu_characteristics.R
-# Manuscript Table 3: neonatal-unit population characteristics by site, with
+# Purpose: Table 2 -- neonatal-unit population characteristics by site, with
 # n (%), explicit "Not recorded" rows for variables with missingness, and
-# column totals (comments 1940947411, and the missing-data request on Table 3).
-# Population = svn_filtered (valid outcome), matching scripts 42/45 (30,449).
+# column totals.
 #
-# Output (../SCRIPTS2-JULY2026/outputs):
-#   table_02_nnu_characteristics.csv   - Variable, Category, KCH, SMCH, Combined
+# Definitions: population = svn_filtered (valid outcome), n=30,449.
 #
-# ASCII only (DSH).
+# Output: table_02_nnu_characteristics.csv
 # ==============================================================================
-# --- Locate shared setup after the July-2026 SCRIPTS reorganisation -----------
-# The pipeline now lives in versioned subfolders: the shared setup is in
-# 'SCRIPTS V3 - RECOLECTION OF PREVIOUS SCRIPTS' and data in the central
-# PROJECTS/Neotree/LBW/Data. Resolved from this script's own path so it runs
-# from any working directory (Rscript) and from the old flat layout too.
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({
     a <- commandArgs(FALSE); f <- a[grepl("^--file=", a)]
@@ -22,10 +14,9 @@ SCRIPT_DIR <- local({
 })
 setwd(SCRIPT_DIR)
 source("00a_setup_shared.R")
-OUT2 <- OUTPUT_DIR   # 4DSH: alias so ported OUT2 references resolve to outputs/<pop>/tables
+OUT2 <- OUTPUT_DIR
 suppressPackageStartupMessages({library(dplyr)})
 cat("\n=== 48_table3_nnu_characteristics.R ===\n")
-# OUT2 defined in the setup block above (this folder's 'outputs'); dir.create(OUT2,recursive=TRUE,showWarnings=FALSE)
 
 nnu <- process_nnu_data(load_nnu_data())
 PH <- c("Term-AGA","Term-SGA","Preterm-AGA","Preterm-SGA")

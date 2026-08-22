@@ -1,35 +1,20 @@
 # ==============================================================================
-# Figure_01_NNU_cohort_flowchart_v2.R  (clarity redesign, 2026-07-10)
-# CONSORT-style cohort-selection flowchart for the NNU (neonatal) dataset.
+# Purpose: Figure 1 -- CONSORT-style cohort-selection flowchart for the NNU
+# (neonatal) dataset.
 #
-# WHAT CHANGED vs the previous version (data logic is IDENTICAL - only the
-# drawing was revised, per David's brief "make Fig 1 clearer"):
-#   1. Caption now WRAPS to the page width (the old single long line was
-#      clipped off the right edge of the PNG/PDF).
-#   2. Higher-contrast title and subtitle (black title; darker subtitle).
-#   3. Final "Analysis population" box is bold and now shows retention as a
-#      percentage of admissions, e.g. "(87.9% of admissions)".
-#   4. Slightly darker box borders and cleaner spacing.
-#   Structure is UNCHANGED: every selection step and every exclusion box is
-#   kept explicit (no boxes merged), ending at the analysis population.
-#
-# Flow (all counts computed from the data, tie out to the analysis population):
-#   Neonatal unit admissions (KCH + SMCH, Jan 2022 - Dec 2025)   [master_joined]
+# Definitions -- selection flow (all counts computed from the data):
+#   Neonatal unit admissions (KCH + SMCH, Jan 2022 - Dec 2025)
 #     -> Excluded: no matched discharge / outcome
-#   Matched admission-discharge records                          [joined files]
+#   Matched admission-discharge records
 #     -> Excluded: missing/invalid birthweight
 #   After birthweight exclusion
 #     -> Excluded: missing/invalid gestational age
 #   Analysis population (SVN-classified, determinate outcome)
 #
-# Outputs: outputs/<pop>/graphs/figure_01_cohort_flowchart.png/.pdf  (+ _kch, _smch)
-#          outputs/<pop>/nnu/figure_01_flowchart_counts.csv    (+ _kch, _smch)
-# NOTE: ASCII characters only (DSH requirement). No new package dependencies.
+# Output: figure_01_cohort_flowchart.png/.pdf (+ _kch, _smch),
+#         figure_01_flowchart_counts.csv (+ _kch, _smch)
 # ==============================================================================
 
-# --- v4 path adapter (unchanged from the validated version) -------------------
-# Ported unchanged from SCRIPTS V3; only the setup-location + output paths adapted
-# for the reorganised folder structure. Computes all counts from the data.
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({
     a <- commandArgs(FALSE); f <- a[grepl("^--file=", a)]

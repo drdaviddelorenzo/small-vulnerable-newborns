@@ -1,29 +1,17 @@
 # ==============================================================================
-# 46_timing_of_death_by_site.R
-# Timing of neonatal death by SITE (appendix, comment 1296814511) and by SVN
-# phenotype (main Table 6). Intervals: 0-1, 1-3, 3-7, 7-14, 14-21, >21 days,
-# plus Unknown age. Reported as n and % of deaths.
+# Purpose: Table 5 -- timing of neonatal death by SVN phenotype (main) and by
+# site (Supplementary Table S2). Intervals: 0-1, 1-3, 3-7, 7-14, 14-21,
+# >21 days, plus Unknown age. Reported as n and % of deaths, and as CFR per
+# 1,000 admissions in that interval.
 #
-# Age-at-death computation copied from SCRIPTS/15_age_at_death.R:
-#   age_at_death_days = (age at admission, hours, capped 672)/24
-#                       + (datetimedeath - datetimeadmission) in days
-# Population = svn_filtered deaths (matches scripts 42/45; total 5,348).
+# Definitions: age at death = (age at admission in hours, capped at 672) / 24
+# + (time from admission to death, in days). Population = svn_filtered
+# deaths (n=5,348).
 #
-# Outputs (../SCRIPTS2-JULY2026/outputs):
-#   table_05_timing_by_site.csv        - intervals x site (KCH, SMCH, both); n and %
-#   table_05_timing_by_phenotype.csv   - intervals x SVN phenotype; n and %
-#   table_05_timing_by_svn_vs_termaga.csv - intervals x All-SVN vs Term-AGA; n and %
-#   table_05_timing_by_bw.csv          - intervals x birth-weight category; n and %
-#   *_cfr.csv (one per table above) - same layout, cells = CFR per 1,000
-#                admissions in that interval (deaths in interval / admissions * 1000)
-#
-# ASCII only (DSH).
+# Output: table_05_timing_by_site.csv, table_05_timing_by_phenotype.csv,
+#         table_05_timing_by_svn_vs_termaga.csv, table_05_timing_by_bw.csv,
+#         and a matching *_cfr.csv for each
 # ==============================================================================
-# --- Locate shared setup after the July-2026 SCRIPTS reorganisation -----------
-# The pipeline now lives in versioned subfolders: the shared setup is in
-# 'SCRIPTS V3 - RECOLECTION OF PREVIOUS SCRIPTS' and data in the central
-# PROJECTS/Neotree/LBW/Data. Resolved from this script's own path so it runs
-# from any working directory (Rscript) and from the old flat layout too.
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({
     a <- commandArgs(FALSE); f <- a[grepl("^--file=", a)]
@@ -31,10 +19,9 @@ SCRIPT_DIR <- local({
 })
 setwd(SCRIPT_DIR)
 source("00a_setup_shared.R")
-OUT2 <- OUTPUT_DIR   # 4DSH: alias so ported OUT2 references resolve to outputs/<pop>/tables
+OUT2 <- OUTPUT_DIR
 suppressPackageStartupMessages({library(dplyr); library(tidyr); library(lubridate)})
 cat("\n=== 46_timing_of_death_by_site.R ===\n")
-# OUT2 defined in the setup block above (this folder's 'outputs'); dir.create(OUT2,recursive=TRUE,showWarnings=FALSE)
 
 AGE_MAX_HOURS <- 672
 classify_age_at_death <- function(days){

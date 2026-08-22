@@ -1,18 +1,14 @@
 # ==============================================================================
-# 49_stillbirth_by_category.R  (Table 2)
-# Stillbirth rate (per 1,000 total deliveries) by SVN phenotype and by
-# birth-weight category, by site and combined, with n and 95% Wilson CI.
-# Ported to SCRIPTS v4 so it runs on the CURRENT dataset (the V3 outputs are
-# from an earlier extract and must not be used).
+# Purpose: Table 1 -- stillbirth rate (per 1,000 total deliveries) by SVN
+# phenotype and by birth-weight category, by site and combined, with 95%
+# Wilson CI.
 #
-# Base = maternal analysis population (valid birth weight + gestation).
-# Stillbirth = neotreeoutcome in {SBF, SBM, STBF, STBM}. Rate = stillbirths /
-# all deliveries in the category x 1,000 (standard stillbirth rate denominator).
+# Definitions: base = maternal analysis population (valid birth weight +
+# gestation). Stillbirth = neotreeoutcome in {SBF, SBM, STBF, STBM}. Rate =
+# stillbirths / all deliveries in the category x 1,000.
 #
-# Output (outputs/): table_01b_stillbirth_rate_by_svn.csv, table_01b_stillbirth_rate_by_bw.csv
-# ASCII only (DSH).
+# Output: table_01b_stillbirth_rate_by_svn.csv, table_01b_stillbirth_rate_by_bw.csv
 # ==============================================================================
-# --- Locate shared setup after the July-2026 SCRIPTS reorganisation -----------
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({
     a <- commandArgs(FALSE); f <- a[grepl("^--file=", a)]
@@ -20,7 +16,7 @@ SCRIPT_DIR <- local({
 })
 setwd(SCRIPT_DIR)
 source("00a_setup_shared.R")
-OUT2 <- OUTPUT_DIR   # 4DSH: alias so ported OUT2 references resolve to outputs/<pop>/tables
+OUT2 <- OUTPUT_DIR
 
 suppressPackageStartupMessages({library(dplyr)})
 cat("\n=== 49_stillbirth_by_category.R ===\n")

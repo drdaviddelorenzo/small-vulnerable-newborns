@@ -1,32 +1,17 @@
-# 37_hiv_distribution_by_svn.R
-# HIV Prevalence and Distribution by SVN and LBW Category
+# ==============================================================================
+# Purpose: generates the HIV/SVN distribution data that
+# Figure_09_SVN_distribution_by_HIV.R reads -- whether maternal HIV status is
+# associated with a different SVN/LBW distribution.
 #
-# Purpose:
-#   Addresses meeting question (9 June 2026, Hannah Calder, Rachel Poffley,
-#   David de Lorenzo): "what is the distribution of HIV exposure across SVN
-#   and LBW categories, and is maternal HIV associated with SVN category?"
+# Definitions: HIV positivity rate within each SVN/LBW category, SVN/LBW
+# distribution within HIV+ vs HIV- groups (column percentages), chi-squared
+# tests of association, and CFR by HIV status within each SVN group.
 #
-#   This is distinct from Scripts 32/34 which show CFR stratified by HIV
-#   status. Script 37 asks the REVERSE question: do HIV-positive mothers
-#   have babies with a different SVN/LBW distribution?
-#
-# Analyses:
-#   1. HIV positivity rate within each SVN category (among tested)
-#   2. HIV positivity rate within each LBW category (among tested)
-#   3. SVN distribution within HIV+ vs HIV- groups (column percentages)
-#   4. LBW distribution within HIV+ vs HIV- groups
-#   5. Chi-squared test: association between SVN category and HIV status
-#   6. Chi-squared test: association between LBW category and HIV status
-#   7. CFR by HIV status within each SVN group (confirmation of Script 32/34)
-#
-# Output files (in OUTPUT_DIR):
-#   dep_figure09_hiv_prevalence_by_svn.csv    — HIV+ rate within each SVN group
-#   dep_figure09_hiv_prevalence_by_lbw.csv    — HIV+ rate within each LBW group
-#   dep_figure09_svn_distribution_by_hiv.csv  — SVN distribution within HIV groups
-#   dep_figure09_lbw_distribution_by_hiv.csv  — LBW distribution within HIV groups
-#   dep_figure09_cfr_by_hiv_svn.csv           — CFR by HIV x SVN (pooled sites)
-#   dep_figure09_chisq_results.csv            — Chi-squared test results
-#   37_hiv_svn_distribution.xlsx       — Combined Excel workbook
+# Output: dep_figure09_hiv_prevalence_by_svn.csv, dep_figure09_hiv_prevalence_by_lbw.csv,
+#         dep_figure09_svn_distribution_by_hiv.csv, dep_figure09_lbw_distribution_by_hiv.csv,
+#         dep_figure09_cfr_by_hiv_svn.csv, dep_figure09_chisq_results.csv,
+#         37_hiv_svn_distribution.xlsx
+# ==============================================================================
 
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({

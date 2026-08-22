@@ -1,32 +1,20 @@
-# 36_temperature_categorical_OR.R
-# Categorical Temperature Analysis — Odds Ratios with Normal Range as Reference
+# ==============================================================================
+# Purpose: generates the categorical temperature-OR data that Figure_07 and
+# helper_Table09_temperature_AllSVN_column.R read -- odds ratios for each
+# temperature category vs the normal range, capturing any U-shaped
+# relationship (particularly at the hyperthermic end).
 #
-# Purpose:
-#   Extends Script 35 (continuous) and Script 18 (raw counts) by computing
-#   formal odds ratios for each temperature category using 36.5–37.5°C as
-#   the reference group (clinical normal range). Covers both hypothermic and
-#   hyperthermic ends of the spectrum. Analysis by SVN group and overall.
+# Definitions -- temperature categories, reference = Normal:
+#   Severe hypothermia:  < 32.0 degC
+#   Hypothermia:         32.0-35.9 degC
+#   Low-normal:          36.0-36.4 degC
+#   Normal (reference):  36.5-37.5 degC
+#   Hyperthermia:        > 37.5 degC
 #
-# Background:
-#   Raised at team meeting 9 June 2026 (Hannah Calder, Rachel Poffley,
-#   David de Lorenzo). The existing continuous analysis (Script 35) models
-#   temperature linearly; this script shows the categorical OR structure
-#   to capture any U-shaped relationship, particularly at the hyperthermic
-#   end (>37.5°C).
-#
-# Temperature categories (matching Script 18 intervals):
-#   1. Severe hypothermia:  < 32.0°C
-#   2. Hypothermia:         32.0 – 35.9°C
-#   3. Low-normal:          36.0 – 36.4°C
-#   4. Normal (REFERENCE):  36.5 – 37.5°C
-#   5. Hyperthermia:        > 37.5°C
-#
-# Output files (in OUTPUT_DIR):
-#   dep_table09_temp_cat_or_overall.csv    — ORs vs normal, overall
-#   dep_table09_temp_cat_or_by_svn.csv     — ORs vs normal, by SVN group
-#   dep_table09_temp_cat_or_by_lbw.csv     — ORs vs normal, by LBW category
-#   dep_table09_temp_cat_sample_sizes.csv  — N per temperature category per group
-#   36_temperature_categorical.xlsx  — Combined Excel workbook
+# Output: dep_table09_temp_cat_or_overall.csv, dep_table09_temp_cat_or_by_svn.csv,
+#         dep_table09_temp_cat_or_by_lbw.csv, dep_table09_temp_cat_sample_sizes.csv,
+#         36_temperature_categorical.xlsx
+# ==============================================================================
 
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({

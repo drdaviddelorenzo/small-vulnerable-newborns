@@ -1,32 +1,17 @@
 # ==============================================================================
-# 47_table1_maternal_expanded.R
-# Expanded manuscript Table 1: maternal delivery characteristics by site
-# (comment 1866460854 - "we need these variables too, this is too short";
-#  693164384 - fill numbers).
+# Purpose: Table 1 -- maternal delivery characteristics by site.
 #
-# NOTE ON AVAILABLE VARIABLES. The maternal (delivery-outcome) datasets are
-# thinner than the NNU datasets. Columns present across BOTH sites are limited
-# to: maternal age (matageyrs), mode of delivery (modedelivery), type of
-# pregnancy (typebirth), birth weight and gestation. Parity, gravidity and
-# antenatal-care counts are NOT in the maternal export; maternal HIV and
-# pregnancy conditions are recorded for KCH/Malawi only. This script therefore
-# reports the reliably cross-site variables, plus SVN phenotype among live
-# births, as n (%) or median (IQR). Every optional column is guarded so the
-# script cannot fail on a missing field.
+# Definitions: the maternal (delivery-outcome) datasets are thinner than the
+# NNU datasets. Columns present across both sites are limited to maternal
+# age, mode of delivery, type of pregnancy, birth weight and gestation
+# (parity, gravidity and antenatal-care counts are not in the maternal
+# export; maternal HIV and pregnancy conditions are recorded for KCH/Malawi
+# only). This script reports the reliably cross-site variables, plus SVN
+# phenotype among live births, as n (%) or median (IQR). Base = maternal
+# analysis population (valid birth weight + gestation).
 #
-# Base = maternal analysis population (valid birth weight + gestation), same
-# definition as 01_flowchart_maternal.R / 02b_table1_maternal.R.
-#
-# Output (../SCRIPTS2-JULY2026/outputs):
-#   table_01a_maternal_characteristics.csv   - Variable, Category, KCH, SMCH, Combined
-#
-# ASCII only (DSH).
+# Output: table_01a_maternal_characteristics.csv
 # ==============================================================================
-# --- Locate shared setup after the July-2026 SCRIPTS reorganisation -----------
-# The pipeline now lives in versioned subfolders: the shared setup is in
-# 'SCRIPTS V3 - RECOLECTION OF PREVIOUS SCRIPTS' and data in the central
-# PROJECTS/Neotree/LBW/Data. Resolved from this script's own path so it runs
-# from any working directory (Rscript) and from the old flat layout too.
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({
     a <- commandArgs(FALSE); f <- a[grepl("^--file=", a)]
@@ -34,10 +19,9 @@ SCRIPT_DIR <- local({
 })
 setwd(SCRIPT_DIR)
 source("00a_setup_shared.R")
-OUT2 <- OUTPUT_DIR   # 4DSH: alias so ported OUT2 references resolve to outputs/<pop>/tables
+OUT2 <- OUTPUT_DIR
 suppressPackageStartupMessages({library(dplyr)})
 cat("\n=== 47_table1_maternal_expanded.R ===\n")
-# OUT2 defined in the setup block above (this folder's 'outputs'); dir.create(OUT2,recursive=TRUE,showWarnings=FALSE)
 
 STILLBIRTH_CODES <- c("SBF","SBM","STBF","STBM")
 GA_MIN_M <- if (exists("GA_MIN_MAT")) GA_MIN_MAT else 22

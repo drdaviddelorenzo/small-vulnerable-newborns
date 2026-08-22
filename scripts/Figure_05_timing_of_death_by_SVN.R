@@ -1,18 +1,14 @@
 # ==============================================================================
-# figure_05_timing_of_death_by_svn.R
-# FIGURE 5 (manuscript) - Timing of neonatal death by SVN phenotype
-#            (both sites combined), single-panel line chart.
+# Purpose: Figure 5 -- timing of neonatal death by SVN phenotype, both sites
+# combined, single-panel line chart.
 #
-# Single-panel version (replaces the earlier 4-panel composite). Computed
-# directly from the shared analysis cohort (process_nnu_data()$svn_filtered),
-# the same population and definitions as Table_05_timing_of_death.R - so the
-# numbers are identical to that table, this just plots the combined-sites
-# "% of deaths in group" lines.
+# Definitions: uses the same population and definitions as
+# Table_05_timing_of_death.R, so the numbers match that table exactly.
+# y = % of that phenotype's recorded-age deaths in each time band
+# (unknown-age deaths excluded from the denominator). Time bands: 0-1, 1-3,
+# 3-7, 7-14, 14-21, >21 days.
 #
-# y = % of that phenotype's RECORDED-AGE deaths in each time band
-#     (Unknown-age deaths excluded from the denominator).
-# Time bands: 0-1, 1-3, 3-7, 7-14, 14-21, >21 days.
-# ASCII-only output (DSH requirement).
+# Output: figure_05_timing_of_death_by_svn.png/.pdf
 # ==============================================================================
 
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --

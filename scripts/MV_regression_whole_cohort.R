@@ -1,34 +1,19 @@
 # ==============================================================================
-# 40b_wholecohort_regression_termAGA_ref.R
-# VARIANT of script 40: whole-cohort predictor model with the SVN phenotype
-# referenced to Term-AGA.
+# Purpose: variant of MV_regression_SVN_population.R -- whole-cohort predictor
+# model with the SVN phenotype referenced to Term-AGA instead of restricted
+# to the SVN phenotypes alone.
 #
-# Difference from script 40:
-#   - Population is the WHOLE cohort (all four phenotypes, ~30,449) so that
-#     Term-AGA is present in the data and can serve as the phenotype reference.
-#   - The phenotype variable (svn_cat4) has four levels with Term-AGA as the
-#     reference. Only the three SVN phenotype rows are of interest; Term-AGA is
-#     the "1.00 reference" and may be hidden in the manuscript table.
+# Definitions: population is the whole cohort (all four phenotypes, ~30,449)
+# so Term-AGA is present in the data as the phenotype reference. Same
+# covariates, coding and missing-data handling as the companion script;
+# birth weight, gestation band and pre-eclampsia are excluded for the same
+# reasons. Use this version when the phenotype should be expressed against
+# the healthy (Term-AGA) reference rather than the least-severe SVN
+# phenotype.
 #
-# Everything else is identical to script 40 (same covariates, same Version A
-# coding, same missing-data handling, univariable + multivariable). Birth weight
-# and gestational age are still excluded (they define the phenotype);
-# pre-eclampsia is still excluded so the two models are directly comparable.
-#
-# Use this if the co-authors prefer phenotype expressed versus Term-AGA (the
-# healthy reference), consistent with the descriptive tables and Figure 7. Note
-# the estimation sample is then the whole cohort, not the 17,956 SVN-only
-# denominator in Hannah's comment - confirm that framing with her.
-#
-# Outputs (in ../SCRIPTS2-JULY2026/outputs):
-#   40b_wholecohort_population_counts.csv
-#   40b_wholecohort_univariable.csv
-#   40b_wholecohort_multivariable.csv
-#   40b_wholecohort_multivariable.xlsx
-#   40b_wholecohort_multivariable_missingness.csv
-#   40b_covariate_list.txt
-#
-# NOTE: ASCII characters only (DSH requirement).
+# Output: 40b_wholecohort_population_counts.csv, 40b_wholecohort_univariable.csv,
+#         40b_wholecohort_multivariable.csv (+ .xlsx),
+#         40b_wholecohort_multivariable_missingness.csv, 40b_covariate_list.txt
 # ==============================================================================
 
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
@@ -41,7 +26,7 @@ source("00a_setup_shared.R")
 
 cat("\n=== MV_regression_whole_cohort.R ===\n")
 
-OUT2 <- OUTPUT_DIR   # alias so ported OUT2 references resolve to output/<pop>/tables
+OUT2 <- OUTPUT_DIR
 
 # ==============================================================================
 # LOAD WHOLE COHORT (all four phenotypes retained; Term-AGA is the reference)
@@ -80,7 +65,7 @@ cat(sprintf("Whole cohort: %d  (KCH %d, SMCH %d); deaths %d\n",
 cat("  (Expect ~30,449; phenotype reference = Term-AGA)\n")
 
 # ==============================================================================
-# DERIVE RISK-FACTOR VARIABLES (identical coding to script 40)
+# DERIVE RISK-FACTOR VARIABLES (identical coding to MV_regression_SVN_population.R)
 # ==============================================================================
 data <- data %>%
     mutate(

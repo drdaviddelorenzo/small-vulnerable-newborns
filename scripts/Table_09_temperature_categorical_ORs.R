@@ -1,17 +1,14 @@
 # ==============================================================================
-# 52_temperature_categorical_OR.R  (Table 10)
-# Categorical admission-temperature odds ratios for neonatal death, reference
-# Normal (36.5-37.5 C), overall and by SVN phenotype. Ported to SCRIPTS v4 to
-# run on the CURRENT dataset. Univariable (death ~ temp_cat), pooled sites.
-# Respects POPULATION ("all" default; "USS" in 52u for the ultrasound subset).
+# Purpose: Table 9 -- categorical admission-temperature odds ratios for
+# neonatal death, reference Normal (36.5-37.5 C), overall and by SVN
+# phenotype.
 #
-# Output (outputs/ or outputs/USS/):
-#   table_09_temp_cat_or_overall.csv   - ORs vs Normal, all SVN phenotypes pooled
-#   table_09_temp_cat_or_by_phenotype.csv - ORs vs Normal within each phenotype
-#   table_09_temp_cat_counts.csv       - n and deaths per temperature category
-# ASCII only (DSH).
+# Definitions: univariable (death ~ temp_cat), pooled sites. Respects
+# POPULATION ("all" default, "USS" for the ultrasound subset).
+#
+# Output: table_09_temp_cat_or_overall.csv, table_09_temp_cat_or_by_phenotype.csv,
+#         table_09_temp_cat_counts.csv
 # ==============================================================================
-# --- Locate shared setup after the July-2026 SCRIPTS reorganisation -----------
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({
     a <- commandArgs(FALSE); f <- a[grepl("^--file=", a)]
@@ -19,7 +16,7 @@ SCRIPT_DIR <- local({
 })
 setwd(SCRIPT_DIR)
 source("00a_setup_shared.R")
-OUT2 <- OUTPUT_DIR   # 4DSH: alias so ported OUT2 references resolve to outputs/<pop>/tables
+OUT2 <- OUTPUT_DIR
 
 suppressPackageStartupMessages({library(dplyr); library(broom)})
 cat("\n=== 52_temperature_categorical_OR.R ===\n")

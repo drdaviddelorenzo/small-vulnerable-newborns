@@ -1,25 +1,14 @@
 # ==============================================================================
-# 45_causes_of_death_by_svn.R
-# Leading causes of neonatal death by SVN grouping (comment 2124830905).
-# Main manuscript table = All-SVN group; appendix = Term-AGA and Overall.
-# Reported as n and % of deaths in each group, both sites combined and by site.
+# Purpose: Table 7a -- leading causes of neonatal death by SVN phenotype,
+# reported as n and % of deaths in each group, both sites combined and by
+# site.
 #
-# Population matches scripts 42/Table 5 (svn_filtered, valid outcome), so the
-# death totals reconcile (All-SVN 4,239; Term-AGA 1,109; total 5,348).
-# Cause normalisation is copied verbatim from SCRIPTS/17_causes_of_death.R.
+# Definitions: population = svn_filtered (valid outcome); death totals:
+# All-SVN 4,239, Term-AGA 1,109, total 5,348.
 #
-# Outputs (../SCRIPTS2-JULY2026/outputs):
-#   table_07a_causes_by_group.csv           - All-SVN / Term-AGA / Overall, ranked n (%)
-#   table_07a_causes_by_group_and_site.csv  - same, split KCH / SMCH
-#   table_07a_causes_top_wide.csv           - top 8 causes side by side (SVN vs Term-AGA vs Overall)
-#
-# ASCII only (DSH).
+# Output: table_07a_causes_by_group.csv, table_07a_causes_by_group_and_site.csv,
+#         table_07a_causes_top_wide.csv
 # ==============================================================================
-# --- Locate shared setup after the July-2026 SCRIPTS reorganisation -----------
-# The pipeline now lives in versioned subfolders: the shared setup is in
-# 'SCRIPTS V3 - RECOLECTION OF PREVIOUS SCRIPTS' and data in the central
-# PROJECTS/Neotree/LBW/Data. Resolved from this script's own path so it runs
-# from any working directory (Rscript) and from the old flat layout too.
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({
     a <- commandArgs(FALSE); f <- a[grepl("^--file=", a)]
@@ -27,10 +16,9 @@ SCRIPT_DIR <- local({
 })
 setwd(SCRIPT_DIR)
 source("00a_setup_shared.R")
-OUT2 <- OUTPUT_DIR   # 4DSH: alias so ported OUT2 references resolve to outputs/<pop>/tables
+OUT2 <- OUTPUT_DIR
 suppressPackageStartupMessages({library(dplyr); library(stringr); library(tidyr)})
 cat("\n=== 45_causes_of_death_by_svn.R ===\n")
-# OUT2 defined in the setup block above (this folder's 'outputs'); dir.create(OUT2,recursive=TRUE,showWarnings=FALSE)
 
 normalise_cause <- function(code){
     code_up <- toupper(trimws(code))

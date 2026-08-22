@@ -1,35 +1,14 @@
 # ==============================================================================
-# Table_08_causes_of_death_by_svn.R
-# Manuscript TABLE 8 - Leading causes of neonatal death by SVN phenotype.
+# Purpose: Table 7b/7c -- leading causes of neonatal death by SVN phenotype,
+# split by site (KCH, Malawi / SMCH, Zimbabwe). Same five cause groups as
+# Table 7a: Prematurity/RDS, Birth asphyxia/HIE, Neonatal sepsis/infection,
+# Congenital anomalies, Other/unspecified.
 #
-# Produces the five collapsed cause groups (as used in the manuscript) as
-# n (% of deaths in that column) for each SVN phenotype, plus pooled All-SVN
-# and Overall columns, with a Total deaths row:
+# Definitions: population = svn_filtered (n=30,449; deaths=5,348), matching
+# Table 5/7a.
 #
-#   Rows    : Prematurity / RDS
-#             Birth asphyxia / HIE
-#             Neonatal sepsis / infection
-#             Congenital anomalies (incl. gastroschisis)
-#             Other / unspecified
-#             Total deaths
-#   Columns : Term-AGA | Term-SGA | Preterm-AGA | Preterm-SGA | All-SVN | Overall
-#
-# Population = svn_filtered (current 30,449 cohort; deaths = outcome_bin == 1;
-# total deaths = 5,348), identical to Table 5 / script 45, so the death totals
-# reconcile with the rest of the manuscript.
-#
-# The five-group mapping is taken verbatim from SCRIPTS V3/17_causes_of_death.R
-# (map_cause_to_category), extended only to catch three free-text prematurity
-# variants and one anomaly variant that pass through normalise_cause as raw
-# strings (PREM, "PREMATURITY WITH RD", "PREMATURE (32-36 WEEKS)",
-# MYELOMENINGOCELE); these additions are flagged inline below.
-#
-# Outputs (outputs/):
-#   table_07bc_causes_by_svn.csv         - wide grid, cells "n (x.x%)"
-#   table_07bc_causes_by_svn_and_site.csv- same grid split KCH / SMCH
-# ASCII only (DSH requirement).
+# Output: table_07bc_causes_by_svn.csv, table_07bc_causes_by_svn_and_site.csv
 # ==============================================================================
-# --- Locate shared setup after the July-2026 SCRIPTS reorganisation -----------
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({
     a <- commandArgs(FALSE); f <- a[grepl("^--file=", a)]
@@ -37,14 +16,14 @@ SCRIPT_DIR <- local({
 })
 setwd(SCRIPT_DIR)
 source("00a_setup_shared.R")
-OUT2 <- OUTPUT_DIR   # 4DSH: alias so ported OUT2 references resolve to outputs/<pop>/tables
+OUT2 <- OUTPUT_DIR
 suppressPackageStartupMessages({library(dplyr); library(stringr); library(tidyr)})
 cat("\n=== Table_08_causes_of_death_by_svn.R ===\n")
 
 # ------------------------------------------------------------------------------
-# FIVE-GROUP CAUSE MAPPING (verbatim from 17_causes_of_death.R::map_cause_to_category,
-# operating on the RAW causedeath code). Additions to catch free-text variants
-# are marked with  ## +added .
+# Collapses the raw causedeath codes into five groups. Some entries are
+# free-text variants rather than standard codes (e.g. "PREM",
+# "MYELOMENINGOCELE") and are matched alongside the coded values.
 # ------------------------------------------------------------------------------
 map_cause5 <- function(code) {
     u <- toupper(trimws(code))
@@ -53,7 +32,7 @@ map_cause5 <- function(code) {
             "PREMATURITY/RDS",
             "PRRDS", "PR", "RDNT", "TTN", "LBW", "RDS",
             "PREMRD", "TERMRD", "EXPREM", "VPREM", "EXLBW", "VLBW", "CLEFTRD",
-            "PREM", "PREMATURITY WITH RD", "PREMATURE (32-36 WEEKS)"  ## +added free-text prematurity
+            "PREM", "PREMATURITY WITH RD", "PREMATURE (32-36 WEEKS)"
         ) ~ "Prematurity / RDS",
 
         u %in% c(
@@ -75,7 +54,7 @@ map_cause5 <- function(code) {
             "BO", "EXOM", "G", "IA", "NEC", "J",
             "CA", "GASTRO", "GSCH", "GSCHIS",
             "OMPH", "OM", "OCA", "MD", "MYELO", "CLEFTLIPPALATE",
-            "MYELOMENINGOCELE"  ## +added free-text anomaly
+            "MYELOMENINGOCELE"
         ) ~ "Congenital anomalies (incl. gastroschisis)",
 
         TRUE ~ "Other / unspecified"

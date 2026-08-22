@@ -1,17 +1,14 @@
 # ==============================================================================
-# 51_los_by_category.R  (Table 7 and 7b)
-# Length of stay (days) among SURVIVORS by SVN phenotype (Table 7) and by
-# birth-weight category (Table 7b), by site and combined: median (IQR), mean,
-# and n. Ported to SCRIPTS v4 to run on the CURRENT dataset.
+# Purpose: Table 6 -- length of stay (days) among survivors, by SVN phenotype
+# and by birth-weight category, by site and combined: median (IQR), mean,
+# and n.
 #
-# LOS variable = lengthofstay (days); stays > 180 days excluded as implausible.
-# Survivors = outcome_bin == 0. Population = svn_filtered (matches scripts 42/48).
-# Respects POPULATION ("all" default; set to "USS" in 51u for the USS subset).
+# Definitions: stays over 180 days are excluded as implausible. Survivors =
+# outcome_bin == 0. Population = svn_filtered. Respects POPULATION ("all"
+# default, "USS" for the ultrasound subset).
 #
-# Output (outputs/ or outputs/USS/): table_06_length_of_stay_by_svn.csv, table_06_length_of_stay_by_bw.csv
-# ASCII only (DSH).
+# Output: table_06_length_of_stay_by_svn.csv, table_06_length_of_stay_by_bw.csv
 # ==============================================================================
-# --- Locate shared setup after the July-2026 SCRIPTS reorganisation -----------
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({
     a <- commandArgs(FALSE); f <- a[grepl("^--file=", a)]
@@ -19,7 +16,7 @@ SCRIPT_DIR <- local({
 })
 setwd(SCRIPT_DIR)
 source("00a_setup_shared.R")
-OUT2 <- OUTPUT_DIR   # 4DSH: alias so ported OUT2 references resolve to outputs/<pop>/tables
+OUT2 <- OUTPUT_DIR
 
 suppressPackageStartupMessages({library(dplyr)})
 cat("\n=== 51_los_by_category.R ===\n")
@@ -35,9 +32,8 @@ surv <- nnu$svn_filtered %>%
            bw_category = factor(ifelse(is.finite(bw_kg)&bw_kg>=BW_MIN_KG&bw_kg<=BW_MAX_KG,
                                        bw_category_from_kg(bw_kg), NA_character_),
                                 levels=c("ELBW","VLBW","LBW","NBW","HBW")),
-           # LOS is not a stored column in the current joined data; compute it
-           # from timestamps (datetimedischarge - datetimeadmission), as in the
-           # V3 pipeline (13_length_of_stay.R).
+           # LOS is not a stored column; compute it from timestamps
+           # (datetimedischarge - datetimeadmission).
            adm_ts = suppressWarnings(lubridate::parse_date_time(datetimeadmission, orders=c("Ymd HMS","Ymd HM","Ymd"))),
            dis_ts = suppressWarnings(lubridate::parse_date_time(datetimedischarge, orders=c("Ymd HMS","Ymd HM","Ymd"))),
            los = as.numeric(difftime(dis_ts, adm_ts, units="days")),

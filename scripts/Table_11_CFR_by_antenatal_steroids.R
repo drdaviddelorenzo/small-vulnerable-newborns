@@ -1,28 +1,16 @@
-# Q21_outcomes_by_antenatal_steroids.R
-# Analysis of Neonatal Outcomes by Antenatal Steroids Use, LBW, and SGA Categories
+# ==============================================================================
+# Purpose: Table 11 -- case fatality with vs without antenatal corticosteroids
+# among eligible preterm neonates, restricted to the clinically eligible
+# window (24+0 to 34+6 weeks gestation).
 #
-# This script:
-# 1. Cleans and processes the `ansteroids` variable.
-# 2. Defines 4 specific groups:
-#    - Steroids Used (Y)
-#    - Steroids Not Used (N)
-#    - Unsure (U)
-#    - Missing (NA or empty)
-# 3. Categorizes Outcomes (Alive vs Neonatal Death).
-# 4. Generates a WIDE format table:
-#    - Rows: Steroids Group (per Facility).
-#    - Columns: LBW and SGA categories.
-#    - Sub-columns: NND (Deaths) and DC (Discharged/Alive).
+# Definitions: the `ansteroids` variable is grouped into Steroids Used (Y) /
+# Not Used (N) / Unsure (U) / Missing. Reports CFR (deaths/n) for "Steroids
+# used" vs "not used", by facility and by LBW/SGA category, with Fisher's
+# exact test p-values.
 #
-# Data sources:
-# - KCH Malawi: Uses `ansteroids`
-# - SMCH Zimbabwe: Uses `ansteroids`
+# Output: table_11_full_*.csv, table_11_ga24to34wk_*.csv, table_11_cfr_by_steroids.csv
+# ==============================================================================
 
-
-# ---- v4 path adapter (ported from SCRIPTS V3; reads current Data, writes to this folder's outputs) ----
-# Ported into SCRIPTS v4 for the manuscript revision. Locates the shared setup in the
-# SCRIPTS V3 folder, runs on the CURRENT central Data, and redirects all outputs into
-# this v4 folder's outputs/<POPULATION>. Run with: Rscript <thisfile>.R
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({
     a <- commandArgs(FALSE); f <- a[grepl("^--file=", a)]
@@ -30,19 +18,6 @@ SCRIPT_DIR <- local({
 })
 setwd(SCRIPT_DIR)
 source("00a_setup_shared.R")
-# ---- end v4 path adapter ----
-
-
-# ===== CONFIGURATION =====
-# Input files
-
-# Output directory
-# (outputs go directly into OUTPUT_DIR)
-
-# ---------------------------------------------------------------------------
-# SHARED VALIDITY THRESHOLDS
-# Must match the thresholds used in analysis_df and valid_df below.
-# ---------------------------------------------------------------------------
 
 # Steroids Groups
 STEROIDS_GROUPS <- c(
@@ -51,10 +26,6 @@ STEROIDS_GROUPS <- c(
     "Unsure (U)",
     "Missing"
 )
-
-
-
-
 
 # Normalize outcomes
 normalise_outcome <- function(x) {
@@ -134,7 +105,6 @@ valid_df <- analysis_df %>%
     filter(outcome_norm %in% c("Alive", "Neonatal Death"))
 
 cat("Total Analysis Population (Valid Outcome):", nrow(valid_df), "\n")
-
 
 # ===== ANALYSIS FUNCTION =====
 

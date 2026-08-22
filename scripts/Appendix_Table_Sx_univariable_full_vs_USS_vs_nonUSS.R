@@ -1,47 +1,25 @@
 # ==============================================================================
-# 44_compare_full_vs_uss.R
-# Compare the univariable SVN risk-factor results between the FULL cohort and the
-# ultrasound-dated (USS) subset, and test whether they differ.
+# Purpose: compares the univariable SVN risk-factor results between the full
+# cohort and the ultrasound-dated (USS) subset, to test whether ultrasound
+# dating changes the associations.
 #
-# Statistical note. The USS subset is NESTED within the full cohort, so a direct
-# "full vs USS" contrast is not a comparison of independent samples and has no
-# clean significance test. The defensible test of whether ultrasound dating
-# changes the associations is to partition the cohort into USS (methodestgest in
-# {USS, EUSS}) and NON-USS (all other GA methods) - two disjoint groups - and
-# test a factor-by-dating-method interaction (this is the approach used in
-# script 38_uss_validation_comparison.R). This script therefore reports:
-#
-#   * the univariable OR for every factor in three columns - ALL (full cohort),
-#     USS subset, and NON-USS subset - for a like-for-like descriptive view; and
-#   * a likelihood-ratio interaction p-value per factor (death ~ factor *
-#     uss_flag, within the All-SVN group) testing whether the association differs
-#     between USS-dated and non-USS-dated newborns. A non-significant p means the
-#     USS and full-cohort estimates are statistically consistent (robust to GA
-#     dating method).
-#
-# The headline All-SVN vs Term-AGA odds ratio is compared the same way.
-#
+# Definitions: the USS subset is nested within the full cohort, so a direct
+# "full vs USS" contrast is not a comparison of independent samples. Instead
+# this partitions the cohort into USS (methodestgest in USS/EUSS) and non-USS
+# (all other GA methods) -- two disjoint groups -- and reports the univariable
+# OR for every factor in all three views (ALL, USS, non-USS), plus a
+# likelihood-ratio interaction p-value per factor testing whether the
+# association differs between USS-dated and non-USS-dated newborns. A
+# non-significant p means the estimates are robust to GA dating method.
 # All estimates are within the pooled All-SVN group (Term-SGA, Preterm-AGA,
-# Preterm-SGA), matching scripts 42 / 42u. Term-AGA is the comparator only for
-# the headline.
+# Preterm-SGA); Term-AGA is the comparator only for the headline estimate.
 #
-# Outputs (in ../SCRIPTS2-JULY2026/outputs), prefixed 44_:
-#   appendix_tablesx_group_counts_by_dating.csv      - n / deaths by group x dating method
-#   appendix_tablesx_headline_full_vs_uss.csv        - svn_group OR in ALL/USS/NON-USS + p_int
-#   appendix_tablesx_univariable_full_vs_uss.csv     - per-factor OR in ALL/USS/NON-USS + p_int
-#   44_compare.xlsx                    - the above on separate sheets
-#
-# Run after 42_ and 42u_ (uses the same data; does not depend on their CSVs).
-# ASCII characters only (Data Safe Haven requirement).
+# Output: appendix_tablesx_group_counts_by_dating.csv,
+#         appendix_tablesx_headline_full_vs_uss.csv,
+#         appendix_tablesx_univariable_full_vs_uss.csv, 44_compare.xlsx
 # ==============================================================================
 
-# --- Load the FULL cohort (USS split is applied manually below) ---------------
 POPULATION <- "all"
-# --- Locate shared setup after the July-2026 SCRIPTS reorganisation -----------
-# The pipeline now lives in versioned subfolders: the shared setup is in
-# 'SCRIPTS V3 - RECOLECTION OF PREVIOUS SCRIPTS' and data in the central
-# PROJECTS/Neotree/LBW/Data. Resolved from this script's own path so it runs
-# from any working directory (Rscript) and from the old flat layout too.
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({
     a <- commandArgs(FALSE); f <- a[grepl("^--file=", a)]
@@ -82,7 +60,7 @@ data <- nnu$svn_filtered %>%
     )
 
 # ==============================================================================
-# DERIVE RISK-FACTOR VARIABLES (identical coding to scripts 42 / 42u, Version A)
+# DERIVE RISK-FACTOR VARIABLES (identical coding to Table_08_univariable_predictors_AllSVN.R)
 # ==============================================================================
 data <- data %>%
     mutate(

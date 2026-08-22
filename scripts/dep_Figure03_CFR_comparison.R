@@ -1,18 +1,16 @@
 # ==============================================================================
-# 05b_cfr_comparison.R
-# Generates the upstream CSV that figure_03_cfr_by_svn_and_site.R reads:
-#   outputs/<population>/nnu/dep_figure03_cfr_comparison.csv
-#     columns: facility, category, n_total, n_known, n_deaths, n_alive,
-#              cfr_pct, ci_lower, ci_upper, classification  ("LBW" | "SVN")
+# Purpose: generates the case-fatality data that Figure_03_CFR_by_SVN_and_site.R
+# reads.
 #
-# Case fatality (deaths per known outcome, %) with Wilson 95% CI, by site,
-# for both classification systems (birth-weight LBW categories and SVN
-# phenotypes), on the analysis cohort (valid BW + GA = svn_filtered).
-# Deaths use the shared outcome_bin (infants brought in dead counted as deaths,
-# consistent with the manuscript outcome definition). Logic mirrors V3 script
-# 10_LBW_vs_SVN_comparison.R on the CURRENT data.
-# Respects POPULATION ("all" default; "USS" writes to outputs/USS/).
-# ASCII only (DSH).
+# Definitions: case fatality (deaths per known outcome, %) with Wilson 95%
+# CI, by site, for both classification systems (birth-weight LBW categories
+# and SVN phenotypes), on the analysis cohort (valid BW + GA). Deaths use the
+# shared outcome_bin (infants brought in dead counted as deaths). Respects
+# POPULATION ("all" default, "USS" for the ultrasound subset).
+#
+# Output: dep_figure03_cfr_comparison.csv
+#   columns: facility, category, n_total, n_known, n_deaths, n_alive,
+#            cfr_pct, ci_lower, ci_upper, classification ("LBW" | "SVN")
 # ==============================================================================
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({

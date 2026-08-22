@@ -1,61 +1,25 @@
 # ==============================================================================
-# 42_svn_grouped_univariable.R
-# NEW ANALYSIS (8 July 2026): Univariable risk factors for neonatal death,
-# comparing the GROUPED small-vulnerable-newborn (SVN) population against the
-# Term-AGA (non-vulnerable) reference group.
+# Purpose: Table 8 -- univariable risk factors for neonatal death, comparing
+# the pooled small-vulnerable-newborn (All-SVN: Term-SGA, Preterm-AGA,
+# Preterm-SGA) population against the Term-AGA reference group.
 #
-# Supersedes the multivariable approach in 40_/40b_. Co-author decisions taken
-# in the UCL meeting on 8 July 2026 (Hannah Calder, Rachel Poffley, David):
+# Definitions: univariable only -- each factor is fitted in its own simple
+# model (death ~ factor), since several predictors are strongly
+# inter-related (Apgar, resuscitation, temperature) and a multivariable
+# model would over-adjust and dilute the estimates for this descriptive
+# question. The univariable set is run separately in the All-SVN and
+# Term-AGA groups, with a factor-by-group interaction test for whether a
+# risk factor behaves differently in vulnerable vs non-vulnerable newborns.
+# Birth-weight category and gestation band are excluded as predictors
+# (definitional components of the phenotype). Headline estimate:
+# death ~ svn_group (All-SVN vs Term-AGA), univariable.
 #
-#   * UNIVARIABLE ONLY. This is a descriptive paper. The clinical question is
-#     "which single factors at admission mark a baby as higher risk", not the
-#     mutually-adjusted (mechanistic) effect. Because the predictors are
-#     strongly inter-related (Apgar, BVM, CPR, resuscitation; temperature on the
-#     causal pathway), a multivariable model over-adjusts and dilutes the
-#     estimates. Each factor is therefore fitted in its own simple model:
-#         death ~ factor
-#
-#   * GROUP the three SVN phenotypes (Term-SGA, Preterm-AGA, Preterm-SGA) into a
-#     single "All-SVN" group; the comparator is Term-AGA. Reporting a separate
-#     set of risk factors per phenotype is not clinically useful and splits the
-#     numbers; grouping gives a cleaner, better-powered comparison.
-#
-#   * Run the univariable set TWICE - once in the All-SVN group, once in the
-#     Term-AGA group - and test whether each factor's odds ratio differs between
-#     the two groups (factor x group interaction). This shows whether a risk
-#     factor behaves differently in vulnerable vs non-vulnerable newborns.
-#
-#   * NO birth-weight category and NO gestation band as predictors (both are
-#     definitional components of the phenotype / grouping).
-#
-# Headline estimate: death ~ svn_group (All-SVN vs Term-AGA), univariable.
-#
-# Risk factors (co-author list): site (facility), maternal HIV status, parity,
-# maternal age, antenatal care, type of pregnancy, mode of delivery,
-# resuscitation, inborn/outborn, Apgar (5 min), sex, admission temperature.
-#
-# Outputs (in ../SCRIPTS2-JULY2026/outputs):
-#   table_08_group_population_counts.csv     - denominators + events by group/site
-#   table_08_svn_group_headline.csv          - death ~ svn_group (All-SVN vs Term-AGA)
-#   table_08_univariable_svn.csv             - univariable OR per factor, All-SVN group
-#   table_08_univariable_termaga.csv         - univariable OR per factor, Term-AGA group
-#   table_08_univariable_comparison.csv      - SVN vs Term-AGA side by side + p_interaction
-#   42_univariable.xlsx                - all of the above on separate sheets
-#   table_08_missingness.csv                 - missingness per factor by group
-#   (Figure 4 forest plot is produced by 43_fig4_svn_univariable_forest.R)
-#
-# NOTE: ASCII characters only (Data Safe Haven requirement).
+# Output: table_08_group_population_counts.csv, table_08_svn_group_headline.csv,
+#         table_08_univariable_svn.csv, table_08_univariable_termaga.csv,
+#         table_08_interaction_pvalues.csv, table_08_missingness.csv,
+#         table_08_univariable_comparison.csv, 42_univariable.xlsx
 # ==============================================================================
 
-# --- Locate and source the shared setup ---------------------------------------
-# Run from SCRIPTS/ (finds setup in ".") or from SCRIPTS2-JULY2026 (finds it in
-# "../SCRIPTS"). After sourcing, the working directory is the SCRIPTS/ folder so
-# the data loaders resolve exactly as in the rest of the pipeline.
-# --- Locate shared setup after the July-2026 SCRIPTS reorganisation -----------
-# The pipeline now lives in versioned subfolders: the shared setup is in
-# 'SCRIPTS V3 - RECOLECTION OF PREVIOUS SCRIPTS' and data in the central
-# PROJECTS/Neotree/LBW/Data. Resolved from this script's own path so it runs
-# from any working directory (Rscript) and from the old flat layout too.
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({
     a <- commandArgs(FALSE); f <- a[grepl("^--file=", a)]

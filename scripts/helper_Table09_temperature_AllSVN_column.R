@@ -1,16 +1,15 @@
 # ==============================================================================
-# 56_temp_or_allsvn.R  (SCRIPTS v4)
-# Table 10 "All-SVN" column: univariable admission-temperature odds ratios for
-# neonatal death in the POOLED All-SVN group (Term-SGA + Preterm-AGA +
-# Preterm-SGA; Term-AGA is the reference phenotype and is EXCLUDED).
+# Purpose: adds the pooled "All-SVN" column to Table 9 -- univariable
+# admission-temperature odds ratios for neonatal death in the pooled All-SVN
+# group (Term-SGA + Preterm-AGA + Preterm-SGA; Term-AGA excluded).
 #
-# Reproduces the values by pooling the per-phenotype temperature x death counts
-# in dep_table09_temp_cat_sample_sizes.csv and computing the 2x2 odds ratio vs Normal
-# (36.5-37.5C). For a single categorical predictor the sample OR equals the
-# glm(death ~ temp_cat) MLE, so this matches a logistic model exactly.
-# ASCII only (DSH).  Run:  Rscript 56_temp_or_allsvn.R
+# Definitions: pools the per-phenotype temperature x death counts from
+# dep_table09_temp_cat_sample_sizes.csv and computes the 2x2 odds ratio vs
+# Normal (36.5-37.5C) directly -- for a single categorical predictor this
+# equals the glm(death ~ temp_cat) MLE.
+#
+# Output: helper_table09_temp_or_allsvn.csv
 # ==============================================================================
-# ---- v4 path adapter (locate shared setup in SCRIPTS V3; write to this folder) ----
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({
     a <- commandArgs(FALSE); f <- a[grepl("^--file=", a)]

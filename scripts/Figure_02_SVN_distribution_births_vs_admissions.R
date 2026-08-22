@@ -1,18 +1,13 @@
 # ==============================================================================
-# fig2_svn_births_vs_nnu_grouped.R  (SCRIPTS v4)  -- SELF-CONTAINED (data + graph)
-# Figure 2 (GROUPED): SVN phenotype distribution across THREE series
-#   (1) Births (Zimbabwe/SMCH)      - all SMCH births with valid BW+GA
-#   (2) NNU admissions (SMCH only)  - like-for-like within-site comparison
-#   (3) NNU admissions (both sites) - KCH + SMCH combined
-# Requested (David, 9 Jul): "Births.." legend; n AND % on every bar; SMCH-only
-# admissions series; the script must derive BOTH the data and the graph.
+# Purpose: Figure 2 -- SVN phenotype distribution across three series: births
+# (SMCH, valid BW+GA), NNU admissions (SMCH only), and NNU admissions (both
+# sites).
 #
-# Data are DERIVED here from the pipeline loaders (no dependence on intermediate
-# CSVs), mirroring script 55 (maternal SVN) and script 53 (NNU svn_filtered):
-#   Births  : process_maternal_data(load_maternal_data()), valid BW+GA, SMCH
-#   NNU     : process_nnu_data(load_nnu_data())$svn_filtered, by facility
-# Each series is % within its SVN-classifiable total (sums to 100%).
-# ASCII only (DSH).  Run:  Rscript fig2_svn_births_vs_nnu_grouped.R
+# Definitions: each series is shown as a % within its own SVN-classifiable
+# total (each series sums to 100%).
+#
+# Output: fig2_svn_births_vs_nnu_grouped_counts.csv,
+#         fig2_svn_births_vs_nnu_grouped.png
 # ==============================================================================
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({

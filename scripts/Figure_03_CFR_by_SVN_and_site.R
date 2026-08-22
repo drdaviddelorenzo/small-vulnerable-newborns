@@ -1,15 +1,14 @@
 # ==============================================================================
-# figure_03_cfr_by_svn_and_site.R
-# FIGURE 3 (manuscript) - Case Fatality Rate by SVN phenotype and site,
-#   computed on the ANALYSIS COHORT (n=30,449; KCH 10,517, SMCH 19,932),
-#   the same population as manuscript Table 5.
+# Purpose: Figure 3 -- case fatality rate by SVN phenotype and site, on the
+# analysis cohort (n=30,449; KCH 10,517, SMCH 19,932) -- the same population
+# as Table 5.
 #
-# Unlike fig5A (which uses the larger all-matched-admissions denominator and so
-# differs slightly from Table 5), this reads the cohort-basis CFRs with Wilson
-# CIs straight from dep_figure03_cfr_comparison.csv (classification == "SVN").
+# Definitions: reads the cohort-basis CFRs with Wilson CIs from
+# dep_figure03_cfr_comparison.csv (classification == "SVN") rather than
+# recomputing them here, since an all-matched-admissions denominator would
+# differ slightly from Table 5's.
 #
-# Source: outputs/<population>/nnu/dep_figure03_cfr_comparison.csv
-# ASCII-only output (DSH requirement).
+# Output: figure_03_cfr_by_svn_and_site.png/.pdf
 # ==============================================================================
 
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --

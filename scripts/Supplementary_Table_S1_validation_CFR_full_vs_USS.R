@@ -1,38 +1,24 @@
-# 38_uss_validation_comparison.R
-# USS Validation: Comparison of USS-confirmed vs non-USS populations
+# ==============================================================================
+# Purpose: Supplementary Table S1 -- validates the main findings by comparing
+# the ultrasound-dated (USS) subset against the full cohort and the non-USS
+# subset.
 #
-# Purpose:
-#   Addressed at meeting 9 June 2026 (Hannah Calder, Rachel Poffley, David de Lorenzo).
-#   Compares key findings between:
-#     (a) USS-confirmed GA subset (methodestgest == "USS" or "EUSS")
-#     (b) Non-USS subset (all other GA methods: LMP, FundHt, FH, MatSc)
-#   to confirm that LMP/FundHt-based GA estimation gives consistent results.
+# Definitions: USS-confirmed GA subset is methodestgest in {USS, EUSS};
+# non-USS is all other GA methods (LMP, fundal height, etc). Reports: sample
+# size and SVN distribution, CFR by SVN category, temperature OR per 1 degC
+# decrease, antenatal steroid effect in Preterm-AGA, and a by-site CFR
+# breakdown, across all three populations (ALL, USS, non-USS).
 #
-#   Existing outputs in outputs/USS/ (POPULATION = "USS") provide the USS subset.
-#   This script computes the non-USS subset for direct comparison.
-#
-# Analyses:
-#   1. Sample size and SVN distribution in non-USS vs USS populations
-#   2. CFR by SVN category (non-USS vs USS)
-#   3. Temperature OR per 1 degC decrease (non-USS vs USS)
-#   4. Antenatal steroid analysis in Preterm-AGA (non-USS vs USS)
-#   5. Summary validation table
-#
-# Output files (in OUTPUT_DIR):
-#   38_01_sample_sizes.csv            - N by GA method group
-#   supplementary_tables1_svn_distribution.csv        - SVN distribution: non-USS vs USS vs ALL
-#   supplementary_tables1_cfr_by_svn.csv              - CFR by SVN: non-USS vs USS vs ALL
-#   supplementary_tables1_temp_or_comparison.csv      - Temperature OR: non-USS vs USS vs ALL
-#   supplementary_tables1_steroid_pretermaga.csv      - Steroid Preterm-AGA: non-USS vs USS vs ALL
-#   supplementary_tables1_validation_summary.csv      - Combined validation summary table
-#   38_uss_validation.xlsx            - Combined Excel workbook
+# Output: supplementary_tables1_svn_distribution.csv,
+#         supplementary_tables1_cfr_by_svn.csv,
+#         supplementary_tables1_cfr_by_svn_and_site.csv,
+#         supplementary_tables1_temp_or_comparison.csv,
+#         supplementary_tables1_steroid_pretermaga.csv,
+#         supplementary_tables1_validation_summary.csv, 38_uss_validation.xlsx
+# ==============================================================================
 
 # Force ALL population (non-USS filter applied manually below)
 POPULATION <- "all"
-# ---- v4 path adapter (ported from SCRIPTS V3; reads current Data, writes to this folder's outputs) ----
-# Ported into SCRIPTS v4 for the manuscript revision. Locates the shared setup in the
-# SCRIPTS V3 folder, runs on the CURRENT central Data, and redirects all outputs into
-# this v4 folder's outputs/<POPULATION>. Run with: Rscript <thisfile>.R
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({
     a <- commandArgs(FALSE); f <- a[grepl("^--file=", a)]
@@ -40,7 +26,6 @@ SCRIPT_DIR <- local({
 })
 setwd(SCRIPT_DIR)
 source("00a_setup_shared.R")
-# ---- end v4 path adapter ----
 
 library(dplyr)
 library(tidyr)

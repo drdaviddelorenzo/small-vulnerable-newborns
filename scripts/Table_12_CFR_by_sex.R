@@ -1,17 +1,14 @@
 # ==============================================================================
-# 54_cfr_by_sex.R  (Table 12)
-# Case fatality by infant sex within each SVN phenotype, both sites combined
-# and by site. Reports % and deaths per 1,000 admissions with Wilson 95% CI.
-# Population = svn_filtered (valid BW + GA; matches scripts 42/48/53). Deaths use
-# the shared outcome_bin (infants brought in dead counted as deaths). Sex derived
-# exactly as in script 42 (gender_std -> Male/Female).
-# Respects POPULATION ("all" default; "USS" writes to outputs/USS/).
+# Purpose: Table 12 -- case fatality by infant sex within each SVN
+# phenotype, both sites combined and by site. Reports % and deaths per 1,000
+# admissions with Wilson 95% CI.
 #
-# Output (outputs/ or outputs/USS/):
-#   table_12_cfr_by_sex.csv           - CFR by phenotype x sex (combined + by site)
-# ASCII only (DSH).
+# Definitions: population = svn_filtered. Deaths use the shared outcome_bin
+# (infants brought in dead counted as deaths). Respects POPULATION ("all"
+# default, "USS" for the ultrasound subset).
+#
+# Output: table_12_cfr_by_sex.csv
 # ==============================================================================
-# --- Locate shared setup after the July-2026 SCRIPTS reorganisation -----------
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({
     a <- commandArgs(FALSE); f <- a[grepl("^--file=", a)]
@@ -19,7 +16,7 @@ SCRIPT_DIR <- local({
 })
 setwd(SCRIPT_DIR)
 source("00a_setup_shared.R")
-OUT2 <- OUTPUT_DIR   # 4DSH: alias so ported OUT2 references resolve to outputs/<pop>/tables
+OUT2 <- OUTPUT_DIR
 
 suppressPackageStartupMessages({library(dplyr)})
 cat("\n=== 54_cfr_by_sex.R ===\n")

@@ -1,17 +1,11 @@
 # ==============================================================================
-# figure_07_temperature_categorical_ors_by_svn.R
-# FIGURE 8 - Categorical admission-temperature odds ratios by SVN group
-#            KCH (Malawi) and SMCH (Zimbabwe), 2022-2025
+# Purpose: Figure 7 -- categorical admission-temperature odds ratios by SVN
+# group, reference 36.5-37.5 degC. Shows that hypothermia raises risk in
+# every phenotype, while only Term-AGA also shows raised risk at
+# hyperthermia (U-shape).
 #
-# Shows the odds of neonatal death in each temperature category versus the
-# normal range (36.5-37.5 degC), for the overall cohort and each SVN group.
-# Demonstrates that hypothermia raises risk in every phenotype, while only
-# Term-AGA turns upward (U-shape) at hyperthermia.
-#
-# Source data: outputs/<pop>/dep_table09_temp_cat_or_overall.csv
-#              outputs/<pop>/dep_table09_temp_cat_or_by_svn.csv
-#              (produced by 36_temperature_categorical_OR.R)
-# NOTE: ASCII characters only.
+# Reads: dep_table09_temp_cat_or_overall.csv, dep_table09_temp_cat_or_by_svn.csv
+#   (written by dep_Table09_temperature_categorical_OR.R -- run that first)
 # ==============================================================================
 
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --

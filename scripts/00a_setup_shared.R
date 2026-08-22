@@ -1,50 +1,22 @@
 # ==============================================================================
-# 00a_setup_shared.R
-# Unified shared setup for every script in this folder.
+# Purpose: shared setup sourced by every script in this folder -- data
+# loading, SVN/SGA classification, birthweight handling, and plotting theme.
 #
-# SOURCE this file at the top of every script:
-#   source("00a_setup_shared.R")
+# Definitions: POPULATION is "all" (default, every newborn with valid GA) or
+# "USS" (only newborns with GA estimated by ultrasound scan); set it before
+# sourcing this file, or leave unset for "all". Study period 1 January 2022
+# to 31 December 2025; facilities KCH (Malawi) and SMCH (Zimbabwe).
 #
-# This is the public-repository build of the SVN/LBW analysis pipeline,
-# adapted from the UCL Data Safe Haven analysis build (paths only -- every
-# statistical / classification / plotting function below is unchanged).
+# Expects, relative to this file's own folder:
+#   ../input/   the six source CSVs (not committed to the repo)
+#   ../output/  all/{tables,graphs}/ and uss/{tables,graphs}/
 #
-# CONFIGURATION
-# -------------
-# POPULATION:  "all"  = all newborns with valid GA (default)
-#              "USS"  = only newborns with GA estimated by ultrasound scan
-# Set POPULATION before sourcing, or leave unset for the default ("all").
-# run_all.R sets this automatically for each of its two passes.
-#
-# FOLDER LAYOUT THIS SCRIPT EXPECTS (all relative -- see PATHS below):
-#   small-vulnerable-newborns/
-#     scripts/                                    <- this file lives here
-#     input/                                       <- the six source CSVs (not committed)
-#     output/
-#       all/{tables,graphs}/
-#       uss/{tables,graphs}/
-#
-# DATA FILES (already trimmed to facility KCH/SMCH + study period
-# 2022-01-01 to 2025-12-31 by make_replication_extract.R; see that script's
-# header in PROJECTS/Neotree/LBW/Data/ for provenance)
-# ----------
-# NNU (admissions + discharges, matched only):
-#   SMCH (Zimbabwe): zim-matched-nnu-data-20220101-to-20251231.csv
-#   KCH  (Malawi):   mwi-matched-nnu-data-20220101-to-20251231.csv
-#
-# NNU master (ALL admissions, matched + unmatched; match_type column) --
-# used only by Figure_01_cohort_flowchart.R for the pre-match denominator:
-#   SMCH (Zimbabwe): zim-master-data-20220101-to-20251231.csv
-#   KCH  (Malawi):   mwi-master-data-20220101-to-20251231.csv
-#
-# Maternal (cleaned outcomes):
-#   SMCH (Zimbabwe): zim-maternal-data-20220101-to-20251231.csv
-#   KCH  (Malawi):   mwi-maternal-data-20220101-to-20251231.csv
-#
-# STUDY PERIOD: 1 January 2022 -- 31 December 2025
-# FACILITIES:   KCH (Malawi) and SMCH (Zimbabwe) only
-#
-# NOTE: All R strings use ASCII characters only (Data Safe Haven requirement).
+# Data files (see input/README.md for the full list):
+#   NNU, matched only:   zim-matched-nnu-data-*.csv, mwi-matched-nnu-data-*.csv
+#   NNU, all admissions: zim-master-data-*.csv, mwi-master-data-*.csv
+#                        (used only by Figure_01_cohort_flowchart.R, for the
+#                        pre-match denominator)
+#   Maternal:            zim-maternal-data-*.csv, mwi-maternal-data-*.csv
 # ==============================================================================
 
 suppressPackageStartupMessages({
@@ -73,9 +45,8 @@ POP_FOLDER <- if (POPULATION == "USS") "uss" else "all"   # output subfolder nam
 cat(sprintf("=== POPULATION: %s (outputs -> outputs/%s/) ===\n", POPULATION, POP_FOLDER))
 
 # ==============================================================================
-# PATHS (all relative to this script's own directory, so the whole 4DSH/
-# folder can be moved or copied -- e.g. onto the UCL Data Safe Haven -- and
-# everything still resolves correctly)
+# PATHS (all relative to this script's own directory, so the repository can
+# be moved or copied anywhere and everything still resolves correctly)
 # ==============================================================================
 # SCRIPT_DIR is set by the small header at the top of every script in this
 # folder, BEFORE it sources this file. Fall back to getwd() if sourced some
@@ -90,7 +61,7 @@ if (!dir.exists(DATA_DIR))
          ". Expected input/ next to scripts/ -- see input/README.md for the ",
          "exact files required.")
 
-# --- Data source files (renamed 4DSH copies; see header note above) ---
+# --- Data source files ---
 SMCH_NNU_FILE       <- file.path(DATA_DIR, "zim-matched-nnu-data-20220101-to-20251231.csv")
 KCH_NNU_FILE        <- file.path(DATA_DIR, "mwi-matched-nnu-data-20220101-to-20251231.csv")
 SMCH_MATERNAL_FILE  <- file.path(DATA_DIR, "zim-maternal-data-20220101-to-20251231.csv")
@@ -104,12 +75,9 @@ for (.f in c(SMCH_NNU_FILE, KCH_NNU_FILE, SMCH_MATERNAL_FILE, KCH_MATERNAL_FILE)
 rm(.f)
 
 # --- Output directories --------------------------------------------------
-# outputs/<all|uss>/tables/  and  outputs/<all|uss>/graphs/  -- a flat
-# two-folder split per population, as opposed to the working-copy pipeline's
-# maternal/nnu/graphs split. OUTPUT_DIR, OUTPUT_DIR_MATERNAL and
-# OUTPUT_DIR_NNU are kept as separate names ONLY for compatibility with
-# scripts ported from the working copy (they all resolve to the SAME
-# "tables" folder here, so nothing needs three different write locations).
+# output/<all|uss>/tables/ and output/<all|uss>/graphs/. OUTPUT_DIR_MATERNAL
+# and OUTPUT_DIR_NNU are aliases for OUTPUT_DIR (some scripts use one name,
+# some the other; all three resolve to the same folder).
 OUTPUT_ROOT <- file.path(SCRIPT_DIR, "..", "output")
 OUTPUT_DIR_POP      <- file.path(OUTPUT_ROOT, POP_FOLDER)
 OUTPUT_DIR          <- file.path(OUTPUT_DIR_POP, "tables")
@@ -558,36 +526,6 @@ save_figure <- function(plot, name, width = 10, height = 7, dpi = 300,
     ggsave(pdf_file, plot = plot, width = width, height = height, device = "pdf")
     ggsave(png_file, plot = plot, width = width, height = height, dpi = dpi, device = "png")
     cat(sprintf("  Saved: %s (PDF + PNG) [%.0f x %.0f in]\n", name, width, height))
-}
-
-# ==============================================================================
-# OUTPUT PATH HELPERS (kept for scripts ported unchanged from the working copy)
-# ==============================================================================
-Q_PREFIX_MAP <- c(
-    "Q1"  = "10", "Q2"  = "02", "Q3"  = "03", "Q4"  = "04",
-    "Q5"  = "05", "Q6"  = "06", "Q7"  = "07", "Q8"  = "11",
-    "Q9"  = "12", "Q10" = "13", "Q11" = "14", "Q12" = "15",
-    "Q13" = "16", "Q14" = "17", "Q15" = "18", "Q16" = "19",
-    "Q17" = "20", "Q18" = "21", "Q19" = "22", "Q20" = "23",
-    "Q21" = "24", "Q22" = "25", "Q23" = "26", "Q24" = "26b"
-)
-
-nnu_path <- function(subdir, file) {
-    q_num <- sub("_outputs$", "", subdir)
-    prefix <- Q_PREFIX_MAP[q_num]
-    if (is.na(prefix)) {
-        return(file.path(OUTPUT_DIR_NNU, subdir, file))
-    }
-    file.path(OUTPUT_DIR_NNU, paste0(prefix, "_", file))
-}
-
-maternal_path <- function(subdir, file) {
-    q_num <- sub("_outputs$", "", subdir)
-    prefix <- Q_PREFIX_MAP[q_num]
-    if (is.na(prefix)) {
-        return(file.path(OUTPUT_DIR_MATERNAL, subdir, file))
-    }
-    file.path(OUTPUT_DIR_MATERNAL, paste0(prefix, "_", file))
 }
 
 # ==============================================================================

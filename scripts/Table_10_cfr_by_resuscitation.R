@@ -1,25 +1,14 @@
 # ==============================================================================
-# Table_11_cfr_by_resuscitation.R
-# Manuscript TABLE 11 - Case fatality by resuscitation requirement at birth.
+# Purpose: Table 10 -- case fatality by resuscitation requirement at birth,
+# on the full 30,449-admission analysis cohort.
 #
-# Fixes the reviewer query "why does this only add to 17,385?": the previous
-# table showed only the four KNOWN resuscitation categories and hid the large
-# not-recorded group in a footnote. This version:
-#   - runs on the 30,449 analysis cohort (svn_filtered, four SVN phenotypes,
-#     valid outcome) - the SAME population as every other table;
-#   - shows "Not recorded" as its own row, so every admission is accounted for
-#     and the rows sum to 30,449 / 5,348 deaths;
-#   - reports n, deaths and CFR per 1,000 admissions (whole numbers) with 95%
-#     Wilson confidence intervals.
+# Definitions: "Not recorded" is shown as its own row so every admission is
+# accounted for (rows sum to 30,449 / 5,348 deaths), rather than folding
+# missing values into "None". Reports n, deaths and CFR per 1,000 admissions
+# with 95% Wilson CI.
 #
-# Resuscitation coding follows Table_09 (variable `resus`), but keeps blank /
-# missing / sentinel values as an explicit "Not recorded" level instead of
-# folding them into "None".
-#
-# Output (outputs/): table_10_cfr_by_resuscitation.csv
-# ASCII only (DSH requirement).
+# Output: table_10_cfr_by_resuscitation.csv
 # ==============================================================================
-# --- Locate shared setup after the July-2026 SCRIPTS reorganisation -----------
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({
     a <- commandArgs(FALSE); f <- a[grepl("^--file=", a)]
@@ -27,7 +16,7 @@ SCRIPT_DIR <- local({
 })
 setwd(SCRIPT_DIR)
 source("00a_setup_shared.R")
-OUT2 <- OUTPUT_DIR   # 4DSH: alias so ported OUT2 references resolve to outputs/<pop>/tables
+OUT2 <- OUTPUT_DIR
 suppressPackageStartupMessages({library(dplyr); library(stringr)})
 cat("\n=== Table_11_cfr_by_resuscitation.R ===\n")
 

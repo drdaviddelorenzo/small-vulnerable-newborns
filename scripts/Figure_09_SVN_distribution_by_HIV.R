@@ -1,16 +1,11 @@
 # ==============================================================================
-# figure_09_svn_distribution_by_hiv.R
-# FIGURE 9 - SVN phenotype distribution by maternal HIV status (combined sites)
-#            KCH (Malawi) and SMCH (Zimbabwe), 2022-2025
+# Purpose: Figure 9 -- SVN phenotype distribution by maternal HIV status,
+# combined sites. HIV-exposed infants shift away from Term-AGA towards the
+# SGA phenotypes (chi-square 21.3, p<0.001), consistent with an effect via
+# fetal growth rather than direct mortality.
 #
-# Shows the distribution of SVN phenotypes within HIV-exposed vs HIV-unexposed
-# infants (among tested mothers). HIV-exposed infants shift away from Term-AGA
-# towards the SGA phenotypes (chi-square 21.3, p<0.001), consistent with an
-# effect via fetal growth rather than direct mortality.
-#
-# Source data: outputs/<pop>/dep_figure09_svn_distribution_by_hiv.csv
-#              (produced by 37_hiv_distribution_by_svn.R)
-# NOTE: ASCII characters only.
+# Reads: dep_figure09_svn_distribution_by_hiv.csv
+#   (written by dep_Figure09_hiv_distribution_by_svn.R -- run that first)
 # ==============================================================================
 
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
@@ -54,7 +49,7 @@ save_figure(fig9, "figure_09_svn_distribution_by_hiv", width = 8, height = 6)
 
 # ------------------------------------------------------------------------------
 # COMPANION VALUES TABLE: counts and % within each HIV group, plus the
-# chi-square test of association (from script 37). Reproducible from R.
+# chi-square test of association (from dep_Figure09_hiv_distribution_by_svn.R).
 # ------------------------------------------------------------------------------
 tbl9 <- plot_df %>%
   transmute(

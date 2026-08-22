@@ -1,18 +1,14 @@
 # ==============================================================================
-# fig7_stillbirth_risk_combined.R  (SCRIPTS v4)
-# Manuscript FIGURE 7. Stillbirth odds ratio by SVN phenotype (combined sites, vs Term-AGA).
-# Figure 7: stillbirth odds ratio by SVN category, BOTH SITES COMBINED (KCH + SMCH).
+# Purpose: Figure 2 -- stillbirth odds ratio by SVN phenotype, both sites
+# combined, reference = Term-AGA.
 #
-# Self-contained: computes the odds ratios directly from the CURRENT maternal data
-# files (same population as Table 2 / script 55: all deliveries with valid birth
-# weight + gestational age, 73,845). It does NOT read 04_08_odds_ratios.csv, which
-# is on an older/smaller population and does not match Table 2.
+# Definitions: computed directly from the maternal data (all deliveries with
+# valid birth weight and gestational age, 73,845), matching Table 1's
+# population. Panel A = all stillbirths; Panel B = late stillbirths
+# (>= 28 weeks).
 #
-# Two panels:  A = all stillbirths;  B = late stillbirths (>= 28 weeks).
-# Reference = Term-AGA (OR = 1). ASCII only (DSH).
-# Run:  Rscript fig7_stillbirth_risk_combined.R
+# Output: figure_02_stillbirth_or_data.csv, figure_02_stillbirth_or_combined.png/.pdf
 # ==============================================================================
-# ---- v4 path adapter (locate shared setup in SCRIPTS V3; write to this folder) ----
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({
     a <- commandArgs(FALSE); f <- a[grepl("^--file=", a)]

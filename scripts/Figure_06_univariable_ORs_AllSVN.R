@@ -1,33 +1,18 @@
 # ==============================================================================
-# 43_fig4_svn_univariable_forest.R
-# Figure 4 (revised, 8 July 2026): forest plot of UNIVARIABLE odds ratios for
-# neonatal death within the grouped small-vulnerable-newborn (All-SVN)
-# population. Replaces the previous multivariable / whole-cohort forest plot.
+# Purpose: forest plot of univariable odds ratios for neonatal death within
+# the pooled small-vulnerable-newborn (All-SVN) population, plus a companion
+# comparison plot against Term-AGA (for the appendix).
 #
-# Co-author decisions (UCL meeting, 8 July 2026):
-#   * Univariable estimates only (no multivariable adjustment).
-#   * Restricted to the All-SVN group (Term-SGA + Preterm-AGA + Preterm-SGA).
-#   * Birth-weight and gestation band are NOT shown (definitional components of
-#     the phenotype).
-#   * A companion comparison plot (All-SVN vs Term-AGA, side by side) is also
-#     produced for the appendix.
+# Definitions: restricted to the All-SVN group (Term-SGA + Preterm-AGA +
+# Preterm-SGA); birth weight and gestation band are excluded (definitional
+# components of the phenotype).
 #
-# INPUT  : reads the CSVs written by 42_svn_grouped_univariable.R
-#            ../SCRIPTS2-JULY2026/outputs/table_08_univariable_svn.csv
-#            ../SCRIPTS2-JULY2026/outputs/table_08_univariable_termaga.csv   (optional)
-# OUTPUT : ../SCRIPTS2-JULY2026/outputs/
-#            figure_06_univariable_ors_allsvn.png / .pdf   (main Figure 4)
-#            figure_06_univariable_ors_svn_vs_termaga.png / .pdf     (appendix comparison)
-#
-# Run AFTER 42_svn_grouped_univariable.R. ASCII characters only (DSH).
+# Reads: table_08_univariable_svn.csv, table_08_univariable_termaga.csv
+#   (written by Table_08_univariable_predictors_AllSVN.R -- run that first)
+# Output: figure_06_univariable_ors_allsvn.png/.pdf,
+#         figure_06_univariable_ors_svn_vs_termaga.png/.pdf
 # ==============================================================================
 
-# --- Locate and source the shared setup (for ggplot2 + palettes) --------------
-# --- Locate shared setup after the July-2026 SCRIPTS reorganisation -----------
-# The pipeline now lives in versioned subfolders: the shared setup is in
-# 'SCRIPTS V3 - RECOLECTION OF PREVIOUS SCRIPTS' and data in the central
-# PROJECTS/Neotree/LBW/Data. Resolved from this script's own path so it runs
-# from any working directory (Rscript) and from the old flat layout too.
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({
     a <- commandArgs(FALSE); f <- a[grepl("^--file=", a)]

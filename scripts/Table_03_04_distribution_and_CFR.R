@@ -1,26 +1,15 @@
 # ==============================================================================
-# 53_distribution_and_cfr.R  (Table 4 and Table 5 / 5b)
-# Recomputes, on the CURRENT dataset, the two tables previously sourced from the
-# V3 pipeline (05a / 05b), so nothing in the manuscript depends on V3 outputs:
-#   - Table 4  : distribution of admissions by SVN phenotype x birth-weight
-#                category (both sites combined), n and % of all admissions.
-#   - Table 5  : case fatality (deaths per 1,000 admissions) by SVN phenotype,
-#     Table 5b : and by birth-weight category, by site and combined, with 95% CI.
+# Purpose: Table 3 -- case fatality (deaths per 1,000 admissions) by SVN
+# phenotype and by birth-weight category, by site and combined, with 95% CI.
+# Table 4 -- distribution of admissions by SVN phenotype x birth-weight
+# category (both sites combined), n and % of all admissions.
 #
-# Population = svn_filtered (matches scripts 42/48). Respects POPULATION
-# ("all" default; "USS" in 53u for the ultrasound subset).
+# Definitions: population = svn_filtered. Respects POPULATION ("all" default,
+# "USS" for the ultrasound subset).
 #
-# Output (outputs/ or outputs/USS/):
-#   table_04_distribution_crosstab.csv   - counts BW x phenotype (+ row/col totals)
-#   table_03_cfr_by_svn.csv              - CFR per 1,000 by phenotype x site
-#   table_03_cfr_by_bw.csv               - CFR per 1,000 by birth-weight x site
-#
-# NOTE (4DSH): filenames match manuscript V16, where Table 3 = case fatality
-# rate and Table 4 = distribution crosstab (opposite of this script's original
-# working-copy numbering, hence the swap here vs the header above).
-# ASCII only (DSH).
+# Output: table_04_distribution_crosstab.csv (counts, + row/col totals),
+#         table_03_cfr_by_svn.csv, table_03_cfr_by_bw.csv (CFR per 1,000)
 # ==============================================================================
-# --- Locate shared setup after the July-2026 SCRIPTS reorganisation -----------
 # --- Locate and source the shared setup (self-contained; runs from anywhere) --
 SCRIPT_DIR <- local({
     a <- commandArgs(FALSE); f <- a[grepl("^--file=", a)]
@@ -28,7 +17,7 @@ SCRIPT_DIR <- local({
 })
 setwd(SCRIPT_DIR)
 source("00a_setup_shared.R")
-OUT2 <- OUTPUT_DIR   # 4DSH: alias so ported OUT2 references resolve to outputs/<pop>/tables
+OUT2 <- OUTPUT_DIR
 
 suppressPackageStartupMessages({library(dplyr); library(tidyr)})
 cat("\n=== 53_distribution_and_cfr.R ===\n")
