@@ -27,14 +27,17 @@ separately.
 | Table 5 (timing of neonatal death) / Supplementary Table S2 (timing of neonatal death **by site**) | `Table_05_timing_of_death.R` — writes both the by-phenotype breakdown (Table 5) and the by-site breakdown (Supplementary Table S2) in one run; see the note below |
 | Figure 5 (timing of death chart) | `Figure_05_timing_of_death_by_SVN.R` |
 | Table 6 (length of stay) | `Table_06_length_of_stay.R` |
+| Distribution comparisons across SVN phenotype / birth-weight category (case fatality, length of stay) | `helper_Table03_06_kruskal_wallis_cfr_los.R` |
 | Table 7a/7b/7c (causes of death, combined / KCH / SMCH) | `Table_07a_causes_of_death.R`, `Table_07bc_causes_of_death_by_site.R` |
 | Table 8 (univariable predictors, All-SVN vs Term-AGA) | `Table_08_univariable_predictors_AllSVN.R` |
 | Figure 6 / Figure 8 (univariable OR forest plot, All-SVN population) | `Figure_06_univariable_ORs_AllSVN.R` |
 | Figure 4b (univariable OR forest plot, USS-SVN sensitivity population) | `Figure_06_univariable_ORs_AllSVN.R` run under `POPULATION="USS"` |
 | Table 9a/9b (categorical admission-temperature ORs by phenotype) | `dep_Table09_temperature_categorical_OR.R` (data) + `Table_09_temperature_categorical_ORs.R` + `helper_Table09_temperature_AllSVN_column.R` (adds the pooled All-SVN column) |
 | Figure 7 (categorical temperature-OR chart) | `Figure_07_temperature_categorical_ORs_by_SVN.R` |
+| Temperature x SVN-phenotype interaction test (admission-temperature paragraph) | `helper_Table09_temperature_svn_interaction.R` |
 | **Table 9 — univariable + multivariable regression, SVN population (Term-SGA ref)** | `MV_regression_SVN_population.R` |
 | **Table 9 — univariable + multivariable regression, whole cohort (Term-AGA ref)** | `MV_regression_whole_cohort.R` |
+| Adjusted continuous (per-1degC) temperature effect, SVN population / whole cohort | `MV_regression_SVN_population_continuous_temperature.R` / `MV_regression_whole_cohort_continuous_temperature.R` — same adjustment set as the two scripts above, with `temp_cat` replaced by the continuous `temp_val` |
 | Table 10 (CFR by resuscitation requirement) | `Table_10_cfr_by_resuscitation.R` |
 | Table 11 (CFR with/without antenatal corticosteroids) | `Table_11_CFR_by_antenatal_steroids.R` |
 | Table 12 (CFR by sex within phenotype) | `Table_12_CFR_by_sex.R` |
