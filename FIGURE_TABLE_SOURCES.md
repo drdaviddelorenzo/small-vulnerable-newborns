@@ -77,3 +77,32 @@ verified against the manuscript text to 2 decimal places on every adjusted
 odds ratio checked. `Table_08_univariable_predictors_AllSVN.R` is a
 univariable-only table (a separate, later analytical decision) and is not a
 substitute for these two scripts.
+
+## Discussion adjusted-OR citations (numbers reconciliation, 2026-09-08)
+
+Three adjusted odds ratios quoted in the Discussion trace to specific rows of
+the multivariable-regression outputs. Recorded here so each cited figure is
+checkable against a single CSV cell (all paths relative to
+`output/all/tables/`).
+
+| Discussion statement | Value | Script | Output CSV | Row |
+|---|---|---|---|---|
+| Maternal HIV infection / HIV exposure not independently associated with mortality | aOR 0.96 (95% CI 0.83-1.11) | `MV_regression_SVN_population.R` | `40_svn_multivariable.csv` | `hiv_statusHIV Positive` |
+| Outborn status and the hazards of inter-facility transfer | aOR 2.37 (95% CI 2.19-2.56) | `MV_regression_whole_cohort.R` | `40b_wholecohort_multivariable.csv` | `inout_catOutborn` |
+| Adjusted odds of death per 1 degC fall in admission temperature | aOR 1.34 (95% CI 1.29-1.38); a 34% rise | `MV_regression_whole_cohort_continuous_temperature.R` | `41b_wholecohort_multivariable_tempcontinuous.csv` | `temp_val` (`OR_per_1degC_decrease` column = 1 / the per-1 degC-rise OR of 0.749) |
+
+The univariable "67% per 1 degC fall (OR 1.67, 95% CI 1.62-1.72)" quoted in
+the Results temperature paragraph is the **whole-cohort univariable**
+estimate: `41b_wholecohort_univariable_tempcontinuous.csv`, row `temp_val`
+(OR 0.599 per 1 degC rise; 1 / 0.599 = 1.669). It is not an adjusted figure;
+the SVN-population univariable equivalent is OR 1.56 per 1 degC fall.
+
+Kruskal-Wallis "p<0.001" for case fatality across SVN phenotypes and across
+birth-weight categories: `helper_Table03_06_kruskal_wallis_cfr_los.R` ->
+`helper_table03_06_kruskal_wallis_cfr_los.csv` (Pearson chi-square also
+reported; both p<0.001).
+
+Temperature-by-SVN interaction "chi-square 10.5, df 3, p=0.015":
+`helper_Table09_temperature_svn_interaction.R` ->
+`helper_table09_temp_svn_interaction.csv` (`lr_chisq` 10.475, `p_value`
+0.01493).
