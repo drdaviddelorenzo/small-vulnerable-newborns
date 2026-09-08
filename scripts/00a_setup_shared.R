@@ -25,7 +25,6 @@ suppressPackageStartupMessages({
     library(tidyr)
     library(ggplot2)
     library(scales)
-    library(forcats)
     library(purrr)
     library(openxlsx)
     library(broom)

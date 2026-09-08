@@ -58,7 +58,7 @@ cat("input/ check passed -- all 6 required data files found.\n\n")
 # 2. Ensure required R packages are installed
 # ------------------------------------------------------------------------------
 REQUIRED_PACKAGES <- c(
-    "dplyr", "readr", "tidyr", "ggplot2", "scales", "forcats", "purrr",
+    "dplyr", "readr", "tidyr", "ggplot2", "scales", "purrr",
     "openxlsx", "broom", "stringr", "lubridate"
 )
 have_pkg <- vapply(REQUIRED_PACKAGES, requireNamespace, logical(1), quietly = TRUE)
